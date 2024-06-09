@@ -1,6 +1,6 @@
 import GameState from "./gameState.js";
 
-export default class GameScreen extends GameState {
+export default class ActionScreen extends GameState {
   constructor(gameStates, canvas, input, content, sound) {
     super(gameStates);
     this.canvas = canvas;
@@ -9,17 +9,13 @@ export default class GameScreen extends GameState {
     this.sound = sound;
     this.load();
   }
-  update(input) {
-  }
-  draw(context, canvas) {
-  }
+  update(input) {}
+  draw(context, canvas) {}
   load() {
     this.playStartingEvent();
   }
-  playStartingEvent() {
-  }
-  loadPlayer() {
-  }
+  playStartingEvent() {}
+  loadPlayer() {}
   endGame() {
     this.gameStates.push(
       new ActionScreen(
