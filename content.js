@@ -73,7 +73,7 @@ export default class ContentManager {
     });
   }
   loadImages() {
-    const images = [];
+    const images = ["tileset"];
 
     images.forEach((element) => {
       this.loadImage((image) => {
