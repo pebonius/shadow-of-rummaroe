@@ -1,5 +1,5 @@
 import GameState from "./gameState.js";
-import ActionScreen from "./actionScreen.js";
+import GameScreen from "./actionScreen.js";
 import { drawText } from "./graphics.js";
 
 export default class LoadingScreen extends GameState {
@@ -44,7 +44,7 @@ export default class LoadingScreen extends GameState {
   }
   goToNextScreen() {
     this.gameStates.push(
-      new ActionScreen(
+      new GameScreen(
         this.gameStates,
         this.canvas,
         this.input,
