@@ -12,10 +12,10 @@ export default class Player {
     this.load(data);
   }
   get width() {
-    return this.spriteSheet.displayedTileSize.x;
+    return this.spriteSheet.tileSize;
   }
   get height() {
-    return this.spriteSheet.displayedTileSize.y;
+    return this.spriteSheet.tileSize;
   }
   update(input) {
     this.physics.update();

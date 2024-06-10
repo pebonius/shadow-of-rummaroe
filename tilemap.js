@@ -6,10 +6,9 @@ export default class Tilemap {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
     this.tileset = gameScreen.tileset;
-    this.tileSize = this.tileset.displayedTileSize;
+    this.tileSize = this.tileset.tileSize;
     this.load(data);
     this.tilesheet = this.tileset.image;
-    this.tilesetTileSize = this.tileset.baseTileSize;
   }
   toString() {
     return this.name;
@@ -33,8 +32,8 @@ export default class Tilemap {
   }
   getTileByDisplayPosition(pos) {
     const transformedPosition = new Point(
-      pos.x / this.tileSize.x,
-      pos.y / this.tileSize.y
+      pos.x / this.tileSize,
+      pos.y / this.tileSize
     );
 
     return this.getTile(transformedPosition);
@@ -45,16 +44,16 @@ export default class Tilemap {
   }
   transformPosToTilemapPos(pos) {
     const transformedPosition = new Point(
-      Math.floor(pos.x / this.tileSize.x),
-      Math.floor(pos.y / this.tileSize.y)
+      Math.floor(pos.x / this.tileSize),
+      Math.floor(pos.y / this.tileSize)
     );
 
     return transformedPosition;
   }
   getTopOfTile(pos) {
     const transformedPosition = new Point(
-      Math.ceil(pos.x * this.tileSize.x),
-      Math.ceil(pos.y * this.tileSize.y)
+      Math.ceil(pos.x * this.tileSize),
+      Math.ceil(pos.y * this.tileSize)
     );
 
     return transformedPosition;
@@ -75,18 +74,18 @@ export default class Tilemap {
       throw new Error(`tileId should be a number, and it's ${tileId}`);
     }
 
-    const tilePos = new Point(pos.x * this.tileSize.x, pos.y * this.tileSize.y);
+    const tilePos = new Point(pos.x * this.tileSize, pos.y * this.tileSize);
 
     context.drawImage(
       this.tilesheet,
-      this.tileset.tileToCol(tileId) * this.tilesetTileSize,
-      this.tileset.tileToRow(tileId) * this.tilesetTileSize,
-      this.tilesetTileSize,
-      this.tilesetTileSize,
+      this.tileset.tileToCol(tileId) * this.tileSize,
+      this.tileset.tileToRow(tileId) * this.tileSize,
+      this.tileSize,
+      this.tileSize,
       tilePos.x,
       tilePos.y,
-      this.tileSize.x,
-      this.tileSize.y
+      this.tileSize,
+      this.tileSize
     );
   }
   drawObjects(context) {
