@@ -6,7 +6,7 @@ export class Physics {
   constructor(parentObject) {
     this.parentObject = parentObject;
     this.velocity = new Point(0, 0);
-    this.damping = 0.95;
+    this.damping = 0.9;
   }
 
   get touchPoint() {
@@ -29,7 +29,7 @@ export class Physics {
   }
 
   get accelleration() {
-    return this.parentObject.maxSpeed * 0.1;
+    return this.parentObject.maxSpeed * 0.2;
   }
 
   update() {

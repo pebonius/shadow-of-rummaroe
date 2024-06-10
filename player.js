@@ -6,7 +6,7 @@ export default class Player {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
     this.spriteSheet = gameScreen.tileset;
-    this.maxSpeed = 3;
+    this.maxSpeed = 1.5;
     this.jump = 1;
     this.physics = new Physics(this);
     this.load(data);
