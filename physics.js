@@ -1,11 +1,11 @@
 import { drawRectangle } from "./graphics.js";
 import Point from "./point.js";
-import { maxNumber } from "./utilities.js";
 
 export class Physics {
   constructor(parentObject) {
     this.parentObject = parentObject;
     this.velocity = new Point(0, 0);
+    this.edgeOffset = 4;
     this.damping = 0.9;
   }
 
@@ -79,15 +79,32 @@ export class Physics {
   }
 
   walkLeft() {
+    if (this.canWalkLeft()) {
+      return;
+    }
     if (this.velocity.x > -this.parentObject.maxSpeed) {
       this.velocity.x -= this.accelleration;
     }
   }
 
+  canWalkLeft() {
+    return this.touchPoint.x - this.edgeOffset <= 0;
+  }
+
   walkRight() {
+    if (this.canWalkRight()) {
+      return;
+    }
     if (this.velocity.x < this.parentObject.maxSpeed) {
       this.velocity.x += this.accelleration;
     }
+  }
+
+  canWalkRight() {
+    return (
+      this.touchPoint.x + this.edgeOffset >=
+      this.parentObject.gameScreen.canvas.width / 2
+    );
   }
 
   jump() {
