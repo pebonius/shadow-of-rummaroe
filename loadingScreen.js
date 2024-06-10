@@ -10,12 +10,10 @@ export default class LoadingScreen extends GameState {
     this.input = input;
     this.content = content;
     this.sound = sound;
-    this.fontSize = this.canvas.width * 0.04;
+    this.fontSize = 8;
     this.loadingFinished = false;
     this.loadingText = "Loading...";
     this.loadedText = "Press ENTER to start";
-    this.textPosY = (this.canvas.height / 4) * 3;
-
     this.loadContent();
   }
   get text() {
@@ -23,18 +21,6 @@ export default class LoadingScreen extends GameState {
       return this.loadedText;
     }
     return this.loadingText;
-  }
-  get textPosX() {
-    if (this.loadingFinished) {
-      return (
-        this.canvas.width / 2 -
-        this.context.measureText(this.loadedText).width / 2
-      );
-    }
-    return (
-      this.canvas.width / 2 -
-      this.context.measureText(this.loadingText).width / 2
-    );
   }
   loadContent() {
     this.content.onFinishedLoading = () => {
@@ -61,13 +47,6 @@ export default class LoadingScreen extends GameState {
   }
   draw(context, canvas) {
     super.draw(context, canvas);
-    drawText(
-      context,
-      this.text,
-      this.fontSize,
-      "white",
-      this.textPosX,
-      this.textPosY
-    );
+    drawText(context, this.text, this.fontSize, "white", 10, 10);
   }
 }
