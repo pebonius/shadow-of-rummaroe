@@ -6,7 +6,7 @@ export default class Player {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
     this.spriteSheet = gameScreen.tileset;
-    this.maxSpeed = 1.5;
+    this.maxSpeed = 3;
     this.jump = 1;
     this.physics = new Physics(this);
     this.load(data);
@@ -26,7 +26,7 @@ export default class Player {
     }
     if (
       this.physics.isStandingOnGround() &&
-      input.isKeyPressed(input.keys.UP)
+      (input.isKeyPressed(input.keys.UP) || input.isKeyPressed(input.keys.X))
     ) {
       this.physics.jump();
     }

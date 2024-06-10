@@ -48,7 +48,7 @@ export class Physics {
   }
 
   applyDamping() {
-    this.velocity.x *= this.damping;
+    this.velocity.x *= this.damping * 0.5;
     this.velocity.y *= this.damping;
   }
 
@@ -62,7 +62,7 @@ export class Physics {
   }
 
   applyGravity() {
-    this.velocity.y += 0.5;
+    this.velocity.y += 0.3;
   }
 
   fall() {
