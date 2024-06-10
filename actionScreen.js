@@ -1,6 +1,7 @@
 import GameState from "./gameState.js";
 import Maps from "./maps.js";
 import Player from "./player.js";
+import Tileset from "./tileset.js";
 
 export default class GameScreen extends GameState {
   constructor(gameStates, canvas, input, content, sound) {
@@ -16,10 +17,12 @@ export default class GameScreen extends GameState {
   }
   draw(context, canvas) {
     this.player.map.draw(context);
+    this.player.draw(context);
   }
   load() {
+    this.tileset = new Tileset(this);
     this.maps = new Maps(this, this.content.data);
-    this.player = new Player(this, this.content.data.playerData);
+    this.player = new Player(this, this.content.data);
   }
   endGame() {
     this.gameStates.push(

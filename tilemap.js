@@ -1,21 +1,15 @@
 import Debug from "./debug.js";
 import Point from "./point.js";
-import {
-  arrayContains,
-  cloneArray,
-  isNumber,
-} from "./utilities.js";
+import { arrayContains, cloneArray, isNumber } from "./utilities.js";
 
 export default class Tilemap {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
-    this.tileSize = new Point(
-      this.gameScreen.canvas.width / 10,
-      this.gameScreen.canvas.height / 10
-    );
+    this.tileset = gameScreen.tileset;
+    this.tileSize = this.tileset.displayedTileSize;
     this.load(data);
-    this.tileset = this.gameScreen.content.getAssetByName("tileset");
-    this.tilesetTileSize = 16;
+    this.tilesheet = this.tileset.image;
+    this.tilesetTileSize = this.tileset.baseTileSize;
   }
   toString() {
     return this.name;
@@ -37,8 +31,33 @@ export default class Tilemap {
     }
     return null;
   }
-  getTileImage(tileId) {
-    return this.gameScreen.content.getAssetByName(tileId);
+  getTileByDisplayPosition(pos) {
+    const transformedPosition = new Point(
+      pos.x / this.tileSize.x,
+      pos.y / this.tileSize.y
+    );
+
+    return this.getTile(transformedPosition);
+  }
+  isWalkableByDisplayPosition(pos) {
+    const transformedPosition = this.transformPosToTilemapPos(pos);
+    return this.isWalkable(transformedPosition);
+  }
+  transformPosToTilemapPos(pos) {
+    const transformedPosition = new Point(
+      Math.floor(pos.x / this.tileSize.x),
+      Math.floor(pos.y / this.tileSize.y)
+    );
+
+    return transformedPosition;
+  }
+  getTopOfTile(pos) {
+    const transformedPosition = new Point(
+      Math.ceil(pos.x * this.tileSize.x),
+      Math.ceil(pos.y * this.tileSize.y)
+    );
+
+    return transformedPosition;
   }
   getTileWalkable(tileId) {
     return arrayContains(this.walkableTiles, tileId);
@@ -46,16 +65,6 @@ export default class Tilemap {
   isWalkable(pos) {
     return this.getTileWalkable(this.getTile(pos));
   }
-  tilesetWidthInTiles = () => {
-    return Math.ceil(this.tileset.width / this.tilesetTileSize);
-  };
-  tileToCol = (tile) => {
-    const row = Math.floor(tile / this.tilesetWidthInTiles());
-    return tile - row * this.tilesetWidthInTiles();
-  };
-  tileToRow = (tile) => {
-    return Math.floor(tile / this.tilesetWidthInTiles());
-  };
   drawTile(pos, context) {
     const tileId = this.tiles[pos.y][pos.x];
     if (tileId === undefined) {
@@ -69,9 +78,9 @@ export default class Tilemap {
     const tilePos = new Point(pos.x * this.tileSize.x, pos.y * this.tileSize.y);
 
     context.drawImage(
-      this.tileset,
-      this.tileToCol(tileId) * this.tilesetTileSize,
-      this.tileToRow(tileId) * this.tilesetTileSize,
+      this.tilesheet,
+      this.tileset.tileToCol(tileId) * this.tilesetTileSize,
+      this.tileset.tileToRow(tileId) * this.tilesetTileSize,
       this.tilesetTileSize,
       this.tilesetTileSize,
       tilePos.x,
@@ -80,9 +89,11 @@ export default class Tilemap {
       this.tileSize.y
     );
   }
+  drawObjects(context) {
+    // draw objects belonging to this map
+  }
   drawPlayer(context) {
-    //const player = this.gameScreen.player;
-    //player.draw(context);
+    const player = this.gameScreen.player;
   }
   draw(context) {
     for (let y = 0; y < this.height; y++)
@@ -90,16 +101,8 @@ export default class Tilemap {
         var pos = new Point(x, y);
         this.drawTile(pos, context);
       }
-    this.drawPlayer(context);
+    this.drawObjects(context);
   }
-  // TODO: drawFromCamera(context, camera) {
-  //   const cameraPos = camera.position;
-  //   for (let y = cameraPos.y; y < cameraPos.y + camera.viewportSize.y; y++)
-  //     for (let x = cameraPos.x; x < cameraPos.x + camera.viewportSize.x; x++) {
-  //       var pos = new Point(x, y);
-  //       this.drawTile(pos, context);
-  //     }
-  // }
   load(data) {
     this.name = data.name;
     this.walkableTiles = cloneArray(data.walkableTiles);

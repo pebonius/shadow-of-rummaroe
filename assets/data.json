@@ -2,6 +2,13 @@
   "game": {
     "title": "Shadow of Rummaroe"
   },
+  "player": {
+    "name": "player",
+    "baseSprite": 0,
+    "startingMapId": 0,
+    "startingPosX": 16,
+    "startingPosY": 16
+  },
   "maps": [
     {
       "name": "0",

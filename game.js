@@ -9,27 +9,12 @@ export default class Game {
   constructor() {
     this.canvas = document.getElementById("canvas");
     this.context = this.canvas.getContext("2d");
-    this.scaleCanvas();
+    this.context.imageSmoothingEnabled = false;
     this.content = new ContentManager();
     this.sound = new SoundManager();
     this.input = new InputManager(canvas);
     this.gameStates = new Array();
     this.isRunning = false;
-  }
-  scaleCanvas() {
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const aspectRatio = 3 / 4;
-
-    if (windowWidth * aspectRatio < windowHeight) {
-      this.canvas.width = window.innerWidth;
-      this.canvas.height = this.canvas.width * aspectRatio;
-    } else {
-      this.canvas.height = windowHeight;
-      this.canvas.width = this.canvas.height / aspectRatio;
-    }
-
-    this.context.imageSmoothingEnabled = false;
   }
   initialize() {
     this.input.addEvents();
