@@ -10,6 +10,8 @@ export default class Game {
     this.canvas = document.getElementById("canvas");
     this.context = this.canvas.getContext("2d");
     this.context.imageSmoothingEnabled = false;
+    this.canvasZoom = 2;
+    this.context.scale(this.canvasZoom, this.canvasZoom);
     this.content = new ContentManager();
     this.sound = new SoundManager();
     this.input = new InputManager(canvas);

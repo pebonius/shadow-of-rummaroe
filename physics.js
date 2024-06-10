@@ -39,7 +39,7 @@ export class Physics {
   }
 
   draw(context) {
-    drawRectangle(context, this.touchPoint, new Point(2, 2), "red");
+    drawRectangle(context, this.touchPoint, new Point(1, 1), "red");
   }
 
   updatePosByVelocity() {
@@ -68,10 +68,9 @@ export class Physics {
   fall() {
     if (this.isStandingOnGround()) {
       this.velocity.y = 0;
-      this.parentObject.position.y =
-        this.parentObject.map.getTopOfTile(
-          new Point(this.tileBelow.x, this.tileBelow.y - 1)
-        ).y + 2;
+      this.parentObject.position.y = this.parentObject.map.getTopOfTile(
+        new Point(this.tileBelow.x, this.tileBelow.y - 1)
+      ).y;
     } else this.applyGravity();
   }
 
