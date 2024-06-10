@@ -6,7 +6,7 @@ export default class Maps {
     this.data = data;
   }
   getMapById(mapId) {
-    const mapData = data.maps[mapId];
+    const mapData = this.data.maps[mapId];
     const map = new Tilemap(this.gameScreen, mapData);
     return map;
   }

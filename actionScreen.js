@@ -1,5 +1,6 @@
 import GameState from "./gameState.js";
 import Maps from "./maps.js";
+import Player from "./player.js";
 
 export default class GameScreen extends GameState {
   constructor(gameStates, canvas, input, content, sound) {
@@ -10,14 +11,16 @@ export default class GameScreen extends GameState {
     this.sound = sound;
     this.load();
   }
-  update(input) {}
-  draw(context, canvas) {}
-  load() {
-    this.maps = new Maps(this, content.data);
-    this.player = new Player(this, this.content.data.playerData);
-    this.variables = new Variables(this, this.content.data.variables);
+  update(input) {
+    this.player.update(input);
   }
-  loadPlayer() {}
+  draw(context, canvas) {
+    this.player.map.draw(context);
+  }
+  load() {
+    this.maps = new Maps(this, this.content.data);
+    this.player = new Player(this, this.content.data.playerData);
+  }
   endGame() {
     this.gameStates.push(
       new GameScreen(

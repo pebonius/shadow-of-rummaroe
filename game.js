@@ -9,7 +9,7 @@ export default class Game {
   constructor() {
     this.canvas = document.getElementById("canvas");
     this.context = this.canvas.getContext("2d");
-    //this.scaleCanvas();
+    this.scaleCanvas();
     this.content = new ContentManager();
     this.sound = new SoundManager();
     this.input = new InputManager(canvas);
