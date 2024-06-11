@@ -53,11 +53,11 @@ export class Physics {
   }
 
   get objectiveVelocityX() {
-    return Math.sqrt(Math.pow(this.velocity.x * 100, 2));
+    return Math.sqrt(Math.pow(this.velocity.x, 2));
   }
 
   get objectiveVelocityY() {
-    return Math.sqrt(Math.pow(this.velocity.y * 100, 2));
+    return Math.sqrt(Math.pow(this.velocity.y, 2));
   }
 
   get accelleration() {
@@ -144,6 +144,6 @@ export class Physics {
 
   jump() {
     this.velocity.y = 0;
-    this.velocity.y -= 5 * this.parentObject.jump;
+    this.velocity.y -= this.parentObject.jump;
   }
 }

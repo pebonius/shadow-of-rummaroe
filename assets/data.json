@@ -9,7 +9,7 @@
     "startingPosX": 16,
     "startingPosY": 16,
     "maxSpeed": 3,
-    "jump": 1
+    "jump": 5
   },
   "maps": [
     {
