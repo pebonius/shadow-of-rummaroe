@@ -133,13 +133,12 @@ export class Physics {
   }
 
   canWalkLeft() {
-    return this.leftTouchPoint.x + this.edgeOffset > 0;
+    return this.leftTouchPoint.x > 0;
   }
 
   canWalkRight() {
     return (
-      this.rightTouchPoint.x - this.edgeOffset <
-      this.parentObject.gameScreen.canvas.width / 2 - 1
+      this.rightTouchPoint.x < this.parentObject.gameScreen.canvas.width / 2 - 1
     );
   }
 
