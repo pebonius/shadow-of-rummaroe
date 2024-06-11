@@ -7,8 +7,6 @@ export default class Player {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
     this.spriteSheet = gameScreen.tileset;
-    this.maxSpeed = 3;
-    this.jump = 1;
     this.physics = new Physics(this);
     this.load(data);
   }
@@ -51,11 +49,11 @@ export default class Player {
     }
   }
   load(data) {
-    this.map = this.gameScreen.maps.getMapById(data.player.startingMapId);
-    this.position = new Point(
-      data.player.startingPosX,
-      data.player.startingPosY
-    );
+    const playerData = data.player;
+    this.map = this.gameScreen.maps.getMapById(playerData.startingMapId);
+    this.position = new Point(playerData.startingPosX, playerData.startingPosY);
+    this.maxSpeed = playerData.maxSpeed;
+    this.jump = playerData.jump;
     this.baseSpriteId = data.player.baseSprite;
   }
 }

@@ -7,7 +7,9 @@
     "baseSprite": 16,
     "startingMapId": 0,
     "startingPosX": 16,
-    "startingPosY": 16
+    "startingPosY": 16,
+    "maxSpeed": 3,
+    "jump": 1
   },
   "maps": [
     {
