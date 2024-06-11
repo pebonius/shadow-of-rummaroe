@@ -5,19 +5,51 @@ export class Physics {
   constructor(parentObject) {
     this.parentObject = parentObject;
     this.velocity = new Point(0, 0);
-    this.edgeOffset = 4;
+    this.edgeOffset = 1;
     this.damping = 0.9;
   }
 
-  get touchPoint() {
+  get bottomTouchPoint() {
     return new Point(
       this.parentObject.position.x + this.parentObject.width * 0.5,
       this.parentObject.position.y + this.parentObject.height
     );
   }
 
+  get leftTouchPoint() {
+    return new Point(
+      this.parentObject.position.x,
+      this.parentObject.position.y + this.parentObject.height * 0.5
+    );
+  }
+
+  get rightTouchPoint() {
+    return new Point(
+      this.parentObject.position.x + this.parentObject.width,
+      this.parentObject.position.y + this.parentObject.height * 0.5
+    );
+  }
+
+  get topTouchPoint() {
+    return new Point(
+      this.parentObject.position.x + this.parentObject.width * 0.5,
+      this.parentObject.position.y
+    );
+  }
+
+  get touchPoints() {
+    return [
+      this.topTouchPoint,
+      this.bottomTouchPoint,
+      this.leftTouchPoint,
+      this.rightTouchPoint,
+    ];
+  }
+
   get tileBelow() {
-    return this.parentObject.map.transformPosToTilemapPos(this.touchPoint);
+    return this.parentObject.map.transformPosToTilemapPos(
+      this.bottomTouchPoint
+    );
   }
 
   get objectiveVelocityX() {
@@ -39,12 +71,16 @@ export class Physics {
   }
 
   draw(context) {
-    drawRectangle(context, this.touchPoint, new Point(1, 1), "red");
+    this.touchPoints.forEach((element) => {
+      drawRectangle(context, element, new Point(1, 1), "red");
+    });
   }
 
   updatePosByVelocity() {
-    this.parentObject.position.x += this.velocity.x;
-    this.parentObject.position.y += this.velocity.y;
+    this.parentObject.positionX =
+      this.velocity.x + this.parentObject.position.x;
+    this.parentObject.positionY =
+      this.velocity.y + this.parentObject.position.y;
   }
 
   applyDamping() {
@@ -68,7 +104,7 @@ export class Physics {
   fall() {
     if (this.isStandingOnGround()) {
       this.velocity.y = 0;
-      this.parentObject.position.y = this.parentObject.map.getTopOfTile(
+      this.parentObject.positionY = this.parentObject.map.getTopOfTile(
         new Point(this.tileBelow.x, this.tileBelow.y - 1)
       ).y;
     } else this.applyGravity();
@@ -79,7 +115,7 @@ export class Physics {
   }
 
   walkLeft() {
-    if (this.canWalkLeft()) {
+    if (!this.canWalkLeft()) {
       return;
     }
     if (this.velocity.x > -this.parentObject.maxSpeed) {
@@ -87,12 +123,8 @@ export class Physics {
     }
   }
 
-  canWalkLeft() {
-    return this.touchPoint.x - this.edgeOffset <= 0;
-  }
-
   walkRight() {
-    if (this.canWalkRight()) {
+    if (!this.canWalkRight()) {
       return;
     }
     if (this.velocity.x < this.parentObject.maxSpeed) {
@@ -100,10 +132,14 @@ export class Physics {
     }
   }
 
+  canWalkLeft() {
+    return this.leftTouchPoint.x + this.edgeOffset > 0;
+  }
+
   canWalkRight() {
     return (
-      this.touchPoint.x + this.edgeOffset >=
-      this.parentObject.gameScreen.canvas.width / 2
+      this.rightTouchPoint.x - this.edgeOffset <
+      this.parentObject.gameScreen.canvas.width / 2 - 1
     );
   }
 

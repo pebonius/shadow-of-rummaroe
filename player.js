@@ -1,3 +1,4 @@
+import Debug from "./debug.js";
 import { drawSpriteAtPos } from "./graphics.js";
 import { Physics } from "./physics.js";
 import Point from "./point.js";
@@ -16,6 +17,12 @@ export default class Player {
   }
   get height() {
     return this.spriteSheet.tileSize;
+  }
+  set positionX(value) {
+    this.position.x = Math.round(value);
+  }
+  set positionY(value) {
+    this.position.y = Math.round(value);
   }
   update(input) {
     this.physics.update();
@@ -38,7 +45,10 @@ export default class Player {
       this.baseSpriteId,
       this.position
     );
-    this.physics.draw(context); //TODO: remove
+
+    if (this.gameScreen.debugMode) {
+      this.physics.draw(context); //TODO: remove
+    }
   }
   load(data) {
     this.map = this.gameScreen.maps.getMapById(data.player.startingMapId);
