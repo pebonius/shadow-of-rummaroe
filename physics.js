@@ -5,7 +5,7 @@ export class Physics {
   constructor(parentObject) {
     this.parentObject = parentObject;
     this.velocity = new Point(0, 0);
-    this.edgeOffset = 1;
+    this.groundTolerance = 2;
     this.damping = 0.9;
   }
 
@@ -96,6 +96,12 @@ export class Physics {
   }
 
   draw(context) {
+    const basePos = new Point(
+      this.bottomTouchPoint.x - this.groundTolerance,
+      this.bottomTouchPoint.y
+    );
+    const baseSize = new Point(this.groundTolerance * 2 + 1, 1);
+    drawRectangle(context, basePos, baseSize, "magenta");
     this.touchPoints.forEach((element) => {
       drawRectangle(context, element, new Point(1, 1), "red");
     });
@@ -136,7 +142,21 @@ export class Physics {
   }
 
   isStandingOnGround() {
-    return !this.parentObject.map.isWalkable(this.tileBelow);
+    return (
+      !this.parentObject.map.isWalkable(this.tileBelow) ||
+      !this.parentObject.map.isWalkableByDisplayPosition(
+        new Point(
+          this.bottomTouchPoint.x - this.groundTolerance,
+          this.bottomTouchPoint.y
+        )
+      ) ||
+      !this.parentObject.map.isWalkableByDisplayPosition(
+        new Point(
+          this.bottomTouchPoint.x + this.groundTolerance,
+          this.bottomTouchPoint.y
+        )
+      )
+    );
   }
 
   walkLeft() {
