@@ -40,6 +40,6 @@ export default class Debug {
     drawText(context, `objVelocityX: ${objectiveVelocityX}`, 5, "white", 2, 20);
     const objectiveVelocityY =
       this.gameScreen.player.physics.objectiveVelocityY;
-    drawText(context, `objVelocityX: ${objectiveVelocityY}`, 5, "white", 2, 25);
+    drawText(context, `objVelocityY: ${objectiveVelocityY}`, 5, "white", 2, 25);
   }
 }
