@@ -1,0 +1,256 @@
+0,base down,
+1,base up,
+2,base right 1,
+3,base right 2,
+4,bug down,
+5,bug up,
+6,bug right 1,
+7,bug right 2,
+8,sword angle,
+9,sword right,
+10,armor,
+11,stove,
+12,book,
+13,bed,
+14,plant ground,
+15,plant pot,
+16,hero down,
+17,hero up,
+18,hero right 1,
+19,hero right 2,
+20,slime down,
+21,slime up,
+22,slime right 1,
+23,slime right 2,
+24,wand angle,
+25,wand right,
+26,shield,
+27,diamond,
+28,jewel,
+29,heart,
+30,coin,
+31,coin stack,
+32,neko down,
+33,neko up,
+34,neko right 1,
+35,neko right 2,
+36,skeleton down,
+37,skeleton up,
+38,skeleton right 1,
+39,skeleton right 2,
+40,knife angle,
+41,knife right,
+42,boot,
+43,stairs down,
+44,stairs up,
+45,door closed,
+46,door open,
+47,ladder,
+48,girl down,
+49,girl up,
+50,girl right 1,
+51,girl right 2,
+52,ant down,
+53,ant up,
+54,ant right 1,
+55,ant right 2,
+56,arrow angle,
+57,arrow right,
+58,ribbon,
+59,pouch,
+60,pot,
+61,pot broken,
+62,chest closed,
+63,chest open,
+64,dog down,
+65,dog up,
+66,dog right 1,
+67,dog right 2,
+68,cat down,
+69,cat up,
+70,cat right 1,
+71,cat right 2,
+72,bow,
+73,gun,
+74,pearls,
+75,bed sign,
+76,sword sign,
+77,potion sign,
+78,window,
+79,signpost,
+80,grass 1,single
+81,grass 2,full
+82,grass 3,cut corners
+83,grass 4,small cliff
+84,grass 5,up-down
+85,space,
+86,island 1,single
+87,island 2,up-down
+88,island 3,left-right
+89,island 4,cut corners
+90,island 5,full
+91,bridge rope,
+92,bridge barrier,
+93,bridge barrier 2,edge
+94,bridge support 1,x
+95,bridge support 2,"""+"""
+96,sand 1,single
+97,sand 2,full
+98,sand 3,cut corners
+99,sand 4,small cliff
+100,sand 5,up-down
+101,sky,
+102,mountains 1,single
+103,mountains 2,up-down
+104,mountains 3,left-right
+105,mountains 4,cut corners
+106,mountains 5,full
+107,fishing rod,
+108,bridge platform,middle
+109,bridge platform,right edge
+110,bridge support 3,y
+111,bridge support 4,I
+112,ground 1,single
+113,ground 2,up-down
+114,ground 3,left-right
+115,ground 4,cut corners
+116,ground 5,full
+117,fire bg,
+118,mountain b,full
+119,cave,
+120,grass hill,
+121,mountain,
+122,mountain snow,
+123,fish,
+124,stone block 1,
+125,scifi block 1,indent
+126,scifi block 2,circuits
+127,scifi block 3,buttons
+128,ground 6,platform full
+129,ground 5b,full
+130,ground 7,rounded top
+131,ground 8,pillow shape
+132,ground 9,bottom gradient
+133,ground 10,cut corners bg
+134,forest 1,top left
+135,forest 2,top right
+136,forest 3,top
+137,forest 4,sparse trees
+138,forest 5,full
+139,cracked block,
+140,stone block 2,
+141,pipe 1,"""-"""
+142,pipe 2,"""+"""
+143,lamp cable,
+144,hole,
+145,wood wall 1,frame
+146,dark bg,
+147,wood wall 2,negative `+`
+148,wood wall 3,block
+149,wood wall 4,negative cross
+150,forest 6,bottom left
+151,forest 7,bottom right
+152,forest 8,bottom
+153,forest 9,left
+154,forest 10,right
+155,xl stone block,top left
+156,xl stone block,top right
+157,pipe,_|
+158,lamp off,
+159,lamp on,
+160,wood planks,dark border
+161,wood planks,
+162,brick wall,
+163,bricks,
+164,tree,
+165,trees full,
+166,trees sparse,
+167,village,
+168,city,
+169,cows grazing,
+170,sunflowers,
+171,xl stone block,bottom left
+172,xl stone block,bottom right
+173,display heart,
+174,display empty,
+175,pc,
+176,stone tiles,dark border
+177,stone tiles,
+178,rocky floor,dark border
+179,rocky floor,
+180,water single,
+181,water full 1,
+182,beach single,
+183,beach full,
+184,grass single,
+185,grass full,
+186,water full 2,
+187,bat right 1,
+188,bat right 2,
+189,shrub s,
+190,shrub m,
+191,shrub l,
+192,lagoon single,
+193,lagoon full,
+194,carpet single,
+195,carpet full,
+196,carpet corners,
+197,boulders 1,
+198,path single,
+199,path up-down,
+200,path left-right,
+201,path crossroad,
+202,path full,
+203,volcano small,
+204,volcano large,
+205,net,
+206,torch lit,
+207,torch unlit,
+208,floortiles,dark border
+209,floortiles,
+210,cave floor,
+211,cave floor,
+212,cave floor,
+213,boulders 2,
+214,stone bridge,
+215,sea,
+216,ship left,
+217,ship down,
+218,ship up,
+219,spikes 1,
+220,spikes 2,
+221,platform,
+222,button off,
+223,button on,
+224,fire fx,
+225,electricity fx,
+226,normal fx 1,
+227,normal fx 2,
+228,slash fx,
+229,surprise fx,
+230,red tile,
+231,yellow tile,
+232,green tile,
+233,blue tile,
+234,white tile,
+235,spikes xl,top left
+236,spikes xl,top right
+237,cylinders,
+238,cylinders,with bar
+239,mushroom,
+240,dot,
+241,manicule right,
+242,hearts 1,
+243,hearts 2,
+244,squares 1,
+245,squares 2,
+246,key idle,
+247,key pressed,
+248,black square,
+249,blue square,
+250,red square,
+251,spikes xl,bottom left
+252,spikes xl,bottom right
+253,metal bar,
+254,metal plating,
+255,empty,
