@@ -53,15 +53,32 @@ export class Physics {
   }
 
   get objectiveVelocityX() {
-    return Math.sqrt(Math.pow(this.velocity.x, 2));
+    const pow = Math.pow(this.velocity.x, 2);
+    const sqrt = Math.sqrt(pow);
+    const round = Math.round(sqrt);
+    return round;
   }
 
   get objectiveVelocityY() {
-    return Math.sqrt(Math.pow(this.velocity.y, 2));
+    const pow = Math.pow(this.velocity.y, 2);
+    const sqrt = Math.sqrt(pow);
+    return sqrt;
   }
 
-  get accelleration() {
-    return this.parentObject.maxSpeed * 0.2;
+  get velocityX() {
+    return this.velocity.x;
+  }
+
+  set velocityX(value) {
+    this.velocity.x = Math.round(value);
+  }
+
+  get velocityY() {
+    return this.velocity.y;
+  }
+
+  set velocityY(value) {
+    this.velocity.y = value;
   }
 
   update() {
@@ -84,16 +101,16 @@ export class Physics {
   }
 
   applyDamping() {
-    this.velocity.x *= this.damping * 0.5;
-    this.velocity.y *= this.damping;
+    this.velocityX *= this.damping * 0.5;
+    this.velocityY *= this.damping;
   }
 
   floorVelocity() {
-    if (this.objectiveVelocityX < 0.01) {
-      this.velocity.x = 0;
+    if (this.objectiveVelocityX < 1) {
+      this.velocityX = 0;
     }
-    if (this.objectiveVelocityY < 0.01) {
-      this.velocity.y = 0;
+    if (this.objectiveVelocityY < 1) {
+      this.velocityY = 0;
     }
   }
 
@@ -118,8 +135,8 @@ export class Physics {
     if (!this.canWalkLeft()) {
       return;
     }
-    if (this.velocity.x > -this.parentObject.maxSpeed) {
-      this.velocity.x -= this.accelleration;
+    if (this.velocityX > -this.parentObject.maxSpeed) {
+      this.velocityX = -1;
     }
   }
 
@@ -127,8 +144,8 @@ export class Physics {
     if (!this.canWalkRight()) {
       return;
     }
-    if (this.velocity.x < this.parentObject.maxSpeed) {
-      this.velocity.x += this.accelleration;
+    if (this.velocityX < this.parentObject.maxSpeed) {
+      this.velocityX = 1;
     }
   }
 
@@ -143,7 +160,7 @@ export class Physics {
   }
 
   jump() {
-    this.velocity.y = 0;
-    this.velocity.y -= this.parentObject.jump;
+    this.velocityY = 0;
+    this.velocityY -= this.parentObject.jump;
   }
 }
