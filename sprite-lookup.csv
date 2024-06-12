@@ -92,8 +92,8 @@
 91,bridge rope,
 92,bridge barrier,
 93,bridge barrier 2,edge
-94,bridge support 1,x
-95,bridge support 2,"""+"""
+94,bridge support 1,`x`
+95,bridge support 2,`+`
 96,sand 1,single
 97,sand 2,full
 98,sand 3,cut corners
@@ -139,8 +139,8 @@
 138,forest 5,full
 139,cracked block,
 140,stone block 2,
-141,pipe 1,"""-"""
-142,pipe 2,"""+"""
+141,pipe 1,`-`
+142,pipe 2,`+`
 143,lamp cable,
 144,hole,
 145,wood wall 1,frame
@@ -155,7 +155,7 @@
 154,forest 10,right
 155,xl stone block,top left
 156,xl stone block,top right
-157,pipe,_|
+157,pipe,`_|`
 158,lamp off,
 159,lamp on,
 160,wood planks,dark border
