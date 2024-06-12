@@ -22,13 +22,10 @@ export default class Debug {
     this.drawPlayerObjectiveVelocity(context);
   }
 
-  drawPlayerObjectiveVelocity(context) {
-    const objectiveVelocityX =
-      this.gameScreen.player.physics.objectiveVelocityX;
-    drawText(context, `objVelocityX: ${objectiveVelocityX}`, 5, "white", 2, 20);
-    const objectiveVelocityY =
-      this.gameScreen.player.physics.objectiveVelocityY;
-    drawText(context, `objVelocityX: ${objectiveVelocityY}`, 5, "white", 2, 25);
+  drawPlayerPosition(context) {
+    const playerPosX = this.gameScreen.player.position.x;
+    const playerPosY = this.gameScreen.player.position.y;
+    drawText(context, `pos: (${playerPosX}, ${playerPosY})`, 5, "white", 2, 5);
   }
 
   drawPlayerVelocity(context) {
@@ -37,9 +34,12 @@ export default class Debug {
     drawText(context, `velocityY: ${playerVelocity.y}`, 5, "white", 2, 15);
   }
 
-  drawPlayerPosition(context) {
-    const playerPosX = this.gameScreen.player.position.x;
-    const playerPosY = this.gameScreen.player.position.y;
-    drawText(context, `pos: (${playerPosX}, ${playerPosY})`, 5, "white", 2, 5);
+  drawPlayerObjectiveVelocity(context) {
+    const objectiveVelocityX =
+      this.gameScreen.player.physics.objectiveVelocityX;
+    drawText(context, `objVelocityX: ${objectiveVelocityX}`, 5, "white", 2, 20);
+    const objectiveVelocityY =
+      this.gameScreen.player.physics.objectiveVelocityY;
+    drawText(context, `objVelocityX: ${objectiveVelocityY}`, 5, "white", 2, 25);
   }
 }
