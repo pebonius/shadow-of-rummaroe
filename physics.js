@@ -52,6 +52,14 @@ export class Physics {
     );
   }
 
+  get tileLeft() {
+    return this.parentObject.map.transformPosToTilemapPos(this.leftTouchPoint);
+  }
+
+  get tileRight() {
+    return this.parentObject.map.transformPosToTilemapPos(this.rightTouchPoint);
+  }
+
   get objectiveVelocityX() {
     const pow = Math.pow(this.velocity.x, 2);
     const sqrt = Math.sqrt(pow);
@@ -150,12 +158,17 @@ export class Physics {
   }
 
   canWalkLeft() {
-    return this.leftTouchPoint.x > 0;
+    return (
+      this.leftTouchPoint.x > 0 &&
+      this.parentObject.map.isWalkable(this.tileLeft)
+    );
   }
 
   canWalkRight() {
     return (
-      this.rightTouchPoint.x < this.parentObject.gameScreen.canvas.width / 2 - 1
+      this.rightTouchPoint.x <
+        this.parentObject.gameScreen.canvas.width / 2 - 1 &&
+      this.parentObject.map.isWalkable(this.tileRight)
     );
   }
 
