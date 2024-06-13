@@ -24,15 +24,12 @@ export default class Player {
   }
   update(input) {
     this.physics.update();
-    if (input.isKeyDown(input.keys.LEFT)) {
+    if (input.isLeft()) {
       this.physics.walkLeft();
-    } else if (input.isKeyDown(input.keys.RIGHT)) {
+    } else if (input.isRight()) {
       this.physics.walkRight();
     }
-    if (
-      this.physics.isStandingOnGround() &&
-      (input.isKeyPressed(input.keys.UP) || input.isKeyPressed(input.keys.X))
-    ) {
+    if (this.physics.isStandingOnGround() && input.isJump()) {
       this.physics.jump();
     }
   }

@@ -1,3 +1,4 @@
+import Debug from "./debug.js";
 import Point from "./point.js";
 import { cloneArray } from "./utilities.js";
 
@@ -186,5 +187,51 @@ export default class InputManager {
   cursorPosition(e) {
     const rect = this.canvas.getBoundingClientRect();
     return new Point(e.clientX - rect.left, e.clientY - rect.top);
+  }
+  // KEYBINDS
+  get keyBindsJump() {
+    return [
+      this.keys.UP,
+      this.keys.W,
+      this.keys.SPACE,
+      this.keys.X,
+      this.keys.NUM8,
+    ];
+  }
+  get keyBindsLeft() {
+    return [this.keys.LEFT, this.keys.A, this.keys.NUM4];
+  }
+  get keyBindsRight() {
+    return [this.keys.RIGHT, this.keys.D, this.keys.NUM6];
+  }
+  isJump() {
+    let value = false;
+    this.keyBindsJump.forEach((element) => {
+      if (this.isKeyPressed(element)) {
+        value = true;
+        return;
+      }
+    });
+    return value;
+  }
+  isLeft() {
+    let value = false;
+    this.keyBindsLeft.forEach((element) => {
+      if (this.isKeyDown(element)) {
+        value = true;
+        return;
+      }
+    });
+    return value;
+  }
+  isRight() {
+    let value = false;
+    this.keyBindsRight.forEach((element) => {
+      if (this.isKeyDown(element)) {
+        value = true;
+        return;
+      }
+    });
+    return value;
   }
 }
