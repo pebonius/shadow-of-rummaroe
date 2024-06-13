@@ -101,9 +101,9 @@ export class Physics {
       this.bottomTouchPoint.y
     );
     const baseSize = new Point(this.baseRadius * 2 + 1, 1);
-    drawRectangle(context, basePos, baseSize, "magenta");
+    drawRectangle(context, basePos, baseSize, "cyan");
     this.touchPoints.forEach((element) => {
-      drawRectangle(context, element, new Point(1, 1), "red");
+      drawRectangle(context, element, new Point(1, 1), "magenta");
     });
   }
 
