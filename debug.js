@@ -20,6 +20,7 @@ export default class Debug {
     this.drawPlayerPosition(context);
     this.drawPlayerVelocity(context);
     this.drawPlayerObjectiveVelocity(context);
+    this.drawPlayerSprite(context);
   }
 
   drawPlayerPosition(context) {
@@ -41,5 +42,11 @@ export default class Debug {
     const objectiveVelocityY =
       this.gameScreen.player.physics.objectiveVelocityY;
     drawText(context, `objVelocityY: ${objectiveVelocityY}`, 5, "white", 2, 25);
+  }
+
+  drawPlayerSprite(context) {
+    const playerSprite = this.gameScreen.player.animations.currentSprite;
+
+    drawText(context, `playerSprite: ${playerSprite}`, 5, "white", 2, 30);
   }
 }
