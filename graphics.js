@@ -39,16 +39,33 @@ export const drawImage = (context, image, position, size) => {
   context.drawImage(image, position.x, position.y, size.x, size.y);
 };
 
-export const drawSpriteAtPos = (context, spriteSheet, spriteId, position) => {
+export const drawSpriteAtPos = (
+  context,
+  spriteSheet,
+  spriteId,
+  position,
+  flippedX = false,
+  flippedY = false
+) => {
+  context.save();
+  context.transform(
+    flippedX ? -1 : 1,
+    0,
+    0,
+    flippedY ? -1 : 1,
+    position.x + (flippedX ? spriteSheet.tileSize : 0),
+    position.y + (flippedY ? spriteSheet.tileSize : 0)
+  );
   context.drawImage(
     spriteSheet.image,
     spriteSheet.tileToCol(spriteId) * spriteSheet.tileSize,
     spriteSheet.tileToRow(spriteId) * spriteSheet.tileSize,
     spriteSheet.tileSize,
     spriteSheet.tileSize,
-    position.x,
-    position.y,
+    0,
+    0,
     spriteSheet.tileSize,
     spriteSheet.tileSize
   );
+  context.restore();
 };

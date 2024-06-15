@@ -1,5 +1,5 @@
+import CharacterAnimations from "./characterAnimations.js";
 import Debug from "./debug.js";
-import { drawSpriteAtPos } from "./graphics.js";
 import { Physics } from "./physics.js";
 import Point from "./point.js";
 
@@ -8,6 +8,7 @@ export default class Player {
     this.gameScreen = gameScreen;
     this.spriteSheet = gameScreen.tileset;
     this.physics = new Physics(this);
+    this.animations = new CharacterAnimations(this);
     this.load(data);
   }
   get width() {
@@ -26,20 +27,18 @@ export default class Player {
     this.physics.update();
     if (input.isLeft()) {
       this.physics.walkLeft();
+      this.animations.walkLeft();
     } else if (input.isRight()) {
       this.physics.walkRight();
+      this.animations.walkRight();
     }
     if (this.physics.isStandingOnGround() && input.isJump()) {
       this.physics.jump();
     }
+    this.animations.update();
   }
   draw(context) {
-    drawSpriteAtPos(
-      context,
-      this.spriteSheet,
-      this.baseSpriteId,
-      this.position
-    );
+    this.animations.draw(context);
 
     if (this.gameScreen.debugMode) {
       this.physics.draw(context); //TODO: remove
@@ -51,6 +50,6 @@ export default class Player {
     this.position = new Point(playerData.startingPosX, playerData.startingPosY);
     this.maxSpeed = playerData.maxSpeed;
     this.jump = playerData.jump;
-    this.baseSpriteId = data.player.baseSprite;
+    this.baseSprite = data.player.baseSprite;
   }
 }
