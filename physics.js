@@ -47,17 +47,17 @@ export class Physics {
   }
 
   get tileBelow() {
-    return this.parentObject.map.transformPosToTilemapPos(
+    return this.parentObject.map.transformPos(
       this.bottomTouchPoint
     );
   }
 
   get tileLeft() {
-    return this.parentObject.map.transformPosToTilemapPos(this.leftTouchPoint);
+    return this.parentObject.map.transformPos(this.leftTouchPoint);
   }
 
   get tileRight() {
-    return this.parentObject.map.transformPosToTilemapPos(this.rightTouchPoint);
+    return this.parentObject.map.transformPos(this.rightTouchPoint);
   }
 
   get objectiveVelocityX() {

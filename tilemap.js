@@ -39,10 +39,10 @@ export default class Tilemap {
     return this.getTile(transformedPosition);
   }
   isWalkableByDisplayPosition(pos) {
-    const transformedPosition = this.transformPosToTilemapPos(pos);
+    const transformedPosition = this.transformPos(pos);
     return this.isWalkable(transformedPosition);
   }
-  transformPosToTilemapPos(pos) {
+  transformPos(pos) {
     const transformedPosition = new Point(
       Math.floor(pos.x / this.tileSize),
       Math.floor(pos.y / this.tileSize)
@@ -58,11 +58,13 @@ export default class Tilemap {
 
     return transformedPosition;
   }
-  getTileWalkable(tileId) {
-    return arrayContains(this.walkableTiles, tileId);
-  }
   isWalkable(pos) {
-    return this.getTileWalkable(this.getTile(pos));
+    const tile = this.getTile(pos);
+    return arrayContains(this.walkableTiles, tile) || this.isSpikes(pos);
+  }
+  isSpikes(pos) {
+    const tile = this.getTile(pos);
+    return arrayContains(this.spikeTiles, tile);
   }
   drawTile(pos, context) {
     const tileId = this.tiles[pos.y][pos.x];
@@ -105,6 +107,7 @@ export default class Tilemap {
   load(data) {
     this.name = data.name;
     this.walkableTiles = cloneArray(data.walkableTiles);
+    this.spikeTiles = cloneArray(data.spikeTiles);
     this.tiles = cloneArray(data.tiles);
   }
 }

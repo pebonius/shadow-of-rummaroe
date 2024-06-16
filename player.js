@@ -1,6 +1,7 @@
 import CharacterAnimations from "./characterAnimations.js";
 import Debug from "./debug.js";
 import { Physics } from "./physics.js";
+import PlayerCollisions from "./playerCollisions.js";
 import Point from "./point.js";
 
 export default class Player {
@@ -9,6 +10,7 @@ export default class Player {
     this.spriteSheet = gameScreen.tileset;
     this.physics = new Physics(this);
     this.animations = new CharacterAnimations(this);
+    this.collisions = new PlayerCollisions(this);
     this.load(data);
   }
   get width() {
@@ -23,8 +25,10 @@ export default class Player {
   set positionY(value) {
     this.position.y = Math.round(value);
   }
-  update(input) {
-    this.physics.update();
+  die() {
+    this.gameScreen.endGame();
+  }
+  handleInput(input) {
     if (input.isLeft()) {
       this.physics.walkLeft();
       this.animations.walkLeft();
@@ -35,6 +39,11 @@ export default class Player {
     if (this.physics.isStandingOnGround() && input.isJump()) {
       this.physics.jump();
     }
+  }
+  update(input) {
+    this.physics.update();
+    this.collisions.update();
+    this.handleInput(input);
     this.animations.update();
   }
   draw(context) {
