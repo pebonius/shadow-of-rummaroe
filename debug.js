@@ -6,7 +6,7 @@ export default class Debug {
     this.gameScreen = gameScreen;
     this.overlayFontSize = 5;
     this.firstRowX = 5;
-    this.secondRowX = 60;
+    this.secondRowX = 65;
   }
   static log(obj) {
     if (!isRunningLocally()) {
