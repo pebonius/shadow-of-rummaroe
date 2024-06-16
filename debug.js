@@ -4,6 +4,9 @@ import { isRunningLocally } from "./utilities.js";
 export default class Debug {
   constructor(gameScreen) {
     this.gameScreen = gameScreen;
+    this.overlayFontSize = 5;
+    this.firstRowX = 5;
+    this.secondRowX = 60;
   }
   static log(obj) {
     if (!isRunningLocally()) {
@@ -27,7 +30,14 @@ export default class Debug {
   drawPlayerPosition(context) {
     const playerPosX = this.gameScreen.player.position.x;
     const playerPosY = this.gameScreen.player.position.y;
-    drawText(context, `pos: (${playerPosX}, ${playerPosY})`, 5, "white", 2, 5);
+    drawText(
+      context,
+      `pos: (${playerPosX}, ${playerPosY})`,
+      this.overlayFontSize,
+      "white",
+      this.firstRowX,
+      5
+    );
   }
 
   drawPlayerVelocity(context) {
@@ -35,25 +45,60 @@ export default class Debug {
       this.gameScreen.player.physics.velocity.x.toFixed(2);
     const playerVelocityY =
       this.gameScreen.player.physics.velocity.y.toFixed(2);
-    drawText(context, `velocityX: ${playerVelocityX}`, 5, "white", 2, 10);
-    drawText(context, `velocityY: ${playerVelocityY}`, 5, "white", 2, 15);
+    drawText(
+      context,
+      `velocityX: ${playerVelocityX}`,
+      this.overlayFontSize,
+      "white",
+      this.firstRowX,
+      10
+    );
+    drawText(
+      context,
+      `velocityY: ${playerVelocityY}`,
+      this.overlayFontSize,
+      "white",
+      this.firstRowX,
+      15
+    );
   }
 
   drawPlayerObjectiveVelocity(context) {
     const objectiveVelocityX =
       this.gameScreen.player.physics.objectiveVelocityX.toFixed(2);
-    drawText(context, `objVelocityX: ${objectiveVelocityX}`, 5, "white", 2, 20);
+    drawText(
+      context,
+      `objVelocityX: ${objectiveVelocityX}`,
+      this.overlayFontSize,
+      "white",
+      this.firstRowX,
+      20
+    );
     const objectiveVelocityY =
       this.gameScreen.player.physics.objectiveVelocityY.toFixed(2);
-    drawText(context, `objVelocityY: ${objectiveVelocityY}`, 5, "white", 2, 25);
+    drawText(
+      context,
+      `objVelocityY: ${objectiveVelocityY}`,
+      this.overlayFontSize,
+      "white",
+      this.firstRowX,
+      25
+    );
   }
 
   drawPlayerSprite(context) {
     const playerSprite = this.gameScreen.player.animations.currentSprite;
     const isFlipped = this.gameScreen.player.animations.flippedX;
 
-    drawText(context, `playerSprite: ${playerSprite}`, 5, "white", 2, 30);
-    drawText(context, `flipped: ${isFlipped}`, 5, "white", 2, 35);
+    drawText(
+      context,
+      `playerSprite: ${playerSprite}`,
+      this.overlayFontSize,
+      "white",
+      this.firstRowX,
+      30
+    );
+    drawText(context, `flipped: ${isFlipped}`, 5, "white", this.firstRowX, 35);
   }
 
   drawTileBelow(context) {
@@ -61,6 +106,13 @@ export default class Debug {
       this.gameScreen.player.physics.tileBelow
     );
 
-    drawText(context, `tileBelow: ${tileBelow}`, 5, "white", 60, 5);
+    drawText(
+      context,
+      `tileBelow: ${tileBelow}`,
+      this.overlayFontSize,
+      "white",
+      this.secondRowX,
+      5
+    );
   }
 }

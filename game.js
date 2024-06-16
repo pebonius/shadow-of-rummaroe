@@ -1,5 +1,5 @@
 import { removeDead, lastElementInArray } from "./utilities.js";
-import { clearContext } from "./graphics.js";
+import { clearContext, drawText } from "./graphics.js";
 import SoundManager from "./sound.js";
 import InputManager from "./input.js";
 import ContentManager from "./content.js";
@@ -32,6 +32,11 @@ export default class Game {
     );
     this.isRunning = true;
     var self = this;
+    this.lastLoop = Date.now();
+    this.fps = 0;
+    this.fpsTimer = 0;
+    this.fpsDelay = 10;
+    this.fpsString = "";
     requestAnimationFrame(() => self.gameLoop(self));
   }
   update() {
@@ -45,12 +50,26 @@ export default class Game {
   draw() {
     clearContext(this.context, this.canvas);
     lastElementInArray(this.gameStates).draw(this.context, this.canvas);
+    this.drawFps();
+  }
+  drawFps() {
+    drawText(this.context, Math.round(this.fpsString), 10, "lime", 140, 5);
   }
   gameLoop(self) {
+    this.measureFps();
     self.update();
     self.draw();
     if (self.isRunning) {
       requestAnimationFrame(() => self.gameLoop(self));
     }
+  }
+  measureFps() {
+    const thisLoop = Date.now();
+    this.fps = 1000 / (thisLoop - this.lastLoop);
+    this.lastLoop = thisLoop;
+    if (this.fpsTimer >= this.fpsDelay) {
+      this.fpsTimer = 0;
+      this.fpsString = this.fps.toFixed(0);
+    } else this.fpsTimer++;
   }
 }
