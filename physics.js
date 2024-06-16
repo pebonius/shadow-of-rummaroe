@@ -47,9 +47,7 @@ export class Physics {
   }
 
   get tileBelow() {
-    return this.parentObject.map.transformPos(
-      this.bottomTouchPoint
-    );
+    return this.parentObject.map.transformPos(this.bottomTouchPoint);
   }
 
   get tileLeft() {
@@ -178,18 +176,11 @@ export class Physics {
   }
 
   canWalkLeft() {
-    return (
-      this.leftTouchPoint.x > 0 &&
-      this.parentObject.map.isWalkable(this.tileLeft)
-    );
+    return this.parentObject.map.isWalkable(this.tileLeft);
   }
 
   canWalkRight() {
-    return (
-      this.rightTouchPoint.x <
-        this.parentObject.gameScreen.canvas.width / 2 - 1 &&
-      this.parentObject.map.isWalkable(this.tileRight)
-    );
+    return this.parentObject.map.isWalkable(this.tileRight);
   }
 
   jump() {

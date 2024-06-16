@@ -106,6 +106,10 @@ export default class Tilemap {
   }
   load(data) {
     this.name = data.name;
+    this.mapAbove = data.mapAbove;
+    this.mapBelow = data.mapBelow;
+    this.mapLeft = data.mapLeft;
+    this.mapRight = data.mapRight;
     this.walkableTiles = cloneArray(data.walkableTiles);
     this.spikeTiles = cloneArray(data.spikeTiles);
     this.tiles = cloneArray(data.tiles);
