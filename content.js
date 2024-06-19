@@ -62,7 +62,15 @@ export default class ContentManager {
       this.data = json;
     }, "./assets/data.json");
   }
-  loadSounds() {}
+  loadSounds() {
+    const sounds = ["damage", "step"];
+
+    sounds.forEach((element) => {
+      this.loadAudio((audio) => {
+        this[element] = audio;
+      }, `./assets/sounds/${element}.wav`);
+    });
+  }
   loadMusic() {
     const tracks = ["another-august"];
 

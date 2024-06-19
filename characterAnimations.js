@@ -49,17 +49,27 @@ export default class CharacterAnimations {
   walkLeft() {
     if (this.walkFrameTimer <= 0) {
       this.resetIdleTimer();
-      this.walkFrameTimer = this.walkFrameDuration;
-      this.switchWalkSprite();
       this.flippedX = true;
+      this.walkFrameTimer = this.walkFrameDuration;
+      if (this.parentObject.physics.isStandingOnGround()) {
+        this.switchWalkSprite();
+        this.parentObject.sounds.playStep();
+      } else {
+        this.spriteOffset = 2;
+      }
     } else this.walkFrameTimer--;
   }
   walkRight() {
     if (this.walkFrameTimer <= 0) {
       this.resetIdleTimer();
-      this.walkFrameTimer = this.walkFrameDuration;
-      this.switchWalkSprite();
       this.flippedX = false;
+      this.walkFrameTimer = this.walkFrameDuration;
+      if (this.parentObject.physics.isStandingOnGround()) {
+        this.switchWalkSprite();
+        this.parentObject.sounds.playStep();
+      } else {
+        this.spriteOffset = 2;
+      }
     } else this.walkFrameTimer--;
   }
   update() {

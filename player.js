@@ -1,4 +1,5 @@
 import CharacterAnimations from "./characterAnimations.js";
+import CharacterSounds from "./characterSounds.js";
 import Debug from "./debug.js";
 import { Physics } from "./physics.js";
 import PlayerCollisions from "./playerCollisions.js";
@@ -11,6 +12,7 @@ export default class Player {
     this.physics = new Physics(this);
     this.animations = new CharacterAnimations(this);
     this.collisions = new PlayerCollisions(this);
+    this.sounds = new CharacterSounds(this);
     this.load(data);
   }
   get width() {
@@ -30,6 +32,7 @@ export default class Player {
     map.onEnter(this);
   }
   die() {
+    this.sounds.playDamage();
     this.gameScreen.endGame();
   }
   handleInput(input) {
@@ -64,5 +67,7 @@ export default class Player {
     this.maxSpeed = playerData.maxSpeed;
     this.jump = playerData.jump;
     this.baseSprite = data.player.baseSprite;
+    this.stepSound = data.player.stepSound;
+    this.damageSound = data.player.damageSound;
   }
 }

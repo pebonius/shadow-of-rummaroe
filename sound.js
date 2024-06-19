@@ -40,12 +40,8 @@ export default class SoundManager {
   set musicVolume(value) {
     this._musicVolume = clamp(value, 0, 1);
   }
-  playSoundEffect(source) {
-    const audio = new Audio(source);
-    audio.volume = this.sfxVolume;
-    audio.oncanplay = (e) => {
-      this.playAudio(audio);
-    };
+  playSoundEffect(audio) {
+    this.playAudio(audio);
   }
   playMusic(audio, loop) {
     if (audio == null && this.currentMusic == null) {

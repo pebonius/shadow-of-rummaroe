@@ -6,9 +6,14 @@ Horrible shadow is hanging over Rummaroe. Monsters roam the land and no place is
 
 ## Credits
 
-Tile art and sprites (licensed CC0) by Wareya:
-https://wareya.itch.io/versatile-255-tile-pixel-art-pack
+Tile art and sprites:
+
+- by Wareya https://wareya.itch.io/versatile-255-tile-pixel-art-pack
 
 Music:
 
-- Another August by The Cynic Project / cynicmusic.com / pixelsphere.org: https://opengameart.org/content/another-august
+- Another August by The Cynic Project / cynicmusic.com / pixelsphere.org https://opengameart.org/content/another-august
+
+Sound effects:
+
+- by SubspaceAudio https://opengameart.org/content/512-sound-effects-8-bit-style

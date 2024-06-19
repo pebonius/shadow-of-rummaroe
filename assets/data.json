@@ -9,7 +9,9 @@
     "startingPosX": 16,
     "startingPosY": 16,
     "maxSpeed": 3,
-    "jump": 5
+    "jump": 5,
+    "stepSound": "step",
+    "damageSound": "damage"
   },
   "maps": [
     {
