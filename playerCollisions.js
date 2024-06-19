@@ -35,29 +35,29 @@ export default class PlayerCollisions {
     const mapHeight = this.map.height * this.map.tileSize;
 
     if (this.player.position.y < 0 && this.map.mapAbove !== null) {
-      this.player.map = this.player.gameScreen.maps.getMapById(
-        this.map.mapAbove
+      this.player.enterMap(
+        this.player.gameScreen.maps.getMapById(this.map.mapAbove)
       );
       this.player.positionY = mapHeight - this.map.tileSize - 1;
       return;
     }
     if (this.bottomTouchPoint.y >= mapHeight && this.map.mapBelow !== null) {
-      this.player.map = this.player.gameScreen.maps.getMapById(
-        this.map.mapBelow
+      this.player.enterMap(
+        this.player.gameScreen.maps.getMapById(this.map.mapBelow)
       );
       this.player.positionY = 0;
       return;
     }
     if (this.player.position.x < 0 && this.map.mapLeft !== null) {
-      this.player.map = this.player.gameScreen.maps.getMapById(
-        this.map.mapLeft
+      this.player.enterMap(
+        this.player.gameScreen.maps.getMapById(this.map.mapLeft)
       );
       this.player.positionX = mapWidth - this.map.tileSize - 1;
       return;
     }
     if (this.rightTouchPoint.x >= mapWidth && this.map.mapRight !== null) {
-      this.player.map = this.player.gameScreen.maps.getMapById(
-        this.map.mapRight
+      this.player.enterMap(
+        this.player.gameScreen.maps.getMapById(this.map.mapRight)
       );
       this.player.positionX = 0;
       return;

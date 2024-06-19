@@ -14,6 +14,7 @@
   "maps": [
     {
       "name": "0",
+      "music": "another-august",
       "mapAbove": null,
       "mapBelow": 1,
       "mapLeft": null,
@@ -35,6 +36,7 @@
     },
     {
       "name": "1",
+      "music": null,
       "mapAbove": null,
       "mapBelow": null,
       "mapLeft": null,
@@ -56,6 +58,7 @@
     },
     {
       "name": "2",
+      "music": null,
       "mapAbove": null,
       "mapBelow": null,
       "mapLeft": 1,

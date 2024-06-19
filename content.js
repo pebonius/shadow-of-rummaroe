@@ -64,7 +64,7 @@ export default class ContentManager {
   }
   loadSounds() {}
   loadMusic() {
-    const tracks = [];
+    const tracks = ["another-august"];
 
     tracks.forEach((element) => {
       this.loadAudio((audio) => {

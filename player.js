@@ -25,6 +25,10 @@ export default class Player {
   set positionY(value) {
     this.position.y = Math.round(value);
   }
+  enterMap(map) {
+    this.map = map;
+    map.onEnter(this);
+  }
   die() {
     this.gameScreen.endGame();
   }
@@ -55,7 +59,7 @@ export default class Player {
   }
   load(data) {
     const playerData = data.player;
-    this.map = this.gameScreen.maps.getMapById(playerData.startingMapId);
+    this.enterMap(this.gameScreen.maps.getMapById(playerData.startingMapId));
     this.position = new Point(playerData.startingPosX, playerData.startingPosY);
     this.maxSpeed = playerData.maxSpeed;
     this.jump = playerData.jump;

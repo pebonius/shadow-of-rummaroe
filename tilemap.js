@@ -19,6 +19,16 @@ export default class Tilemap {
   get height() {
     return this.tiles[0].length;
   }
+  onEnter(player) {
+    this.playMusic();
+  }
+  playMusic() {
+    if (this.music === null) {
+      return;
+    }
+    const mapMusic = this.gameScreen.content.getAssetByName(this.music);
+    this.gameScreen.sound.playMusic(mapMusic, true);
+  }
   containsPosition(pos) {
     return (
       pos.x >= 0 && pos.x < this.width && pos.y >= 0 && pos.y < this.height
@@ -106,6 +116,7 @@ export default class Tilemap {
   }
   load(data) {
     this.name = data.name;
+    this.music = data.music;
     this.mapAbove = data.mapAbove;
     this.mapBelow = data.mapBelow;
     this.mapLeft = data.mapLeft;
