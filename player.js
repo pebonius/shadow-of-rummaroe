@@ -35,6 +35,14 @@ export default class Player {
     this.sounds.playDamage();
     this.gameScreen.endGame();
   }
+  takeStep() {
+    if (
+      this.physics.isStandingOnGround() &&
+      this.animations.spriteOffset === 2
+    ) {
+      this.sounds.playStep();
+    }
+  }
   handleInput(input) {
     if (input.isLeft()) {
       this.physics.walkLeft();
@@ -45,6 +53,7 @@ export default class Player {
     }
     if (this.physics.isStandingOnGround() && input.isJump()) {
       this.physics.jump();
+      this.sounds.playStep();
     }
   }
   update(input) {
