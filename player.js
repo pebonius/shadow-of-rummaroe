@@ -55,6 +55,9 @@ export default class Player {
       this.physics.jump();
       this.sounds.playStep();
     }
+    if (this.physics.isStandingOnGround() && input.isDrop()) {
+      this.physics.drop();
+    }
   }
   update(input) {
     this.physics.update();

@@ -198,15 +198,18 @@ export default class InputManager {
       this.keys.NUM8,
     ];
   }
+  get keyBindsDrop() {
+    return [this.keys.DOWN, this.keys.S, this.keys.NUM2];
+  }
   get keyBindsLeft() {
     return [this.keys.LEFT, this.keys.A, this.keys.NUM4];
   }
   get keyBindsRight() {
     return [this.keys.RIGHT, this.keys.D, this.keys.NUM6];
   }
-  isJump() {
+  anyKeyBindPressed(keyBinds) {
     let value = false;
-    this.keyBindsJump.forEach((element) => {
+    keyBinds.forEach((element) => {
       if (this.isKeyPressed(element)) {
         value = true;
         return;
@@ -214,9 +217,9 @@ export default class InputManager {
     });
     return value;
   }
-  isLeft() {
+  anyKeyBindDown(keyBinds) {
     let value = false;
-    this.keyBindsLeft.forEach((element) => {
+    keyBinds.forEach((element) => {
       if (this.isKeyDown(element)) {
         value = true;
         return;
@@ -224,14 +227,16 @@ export default class InputManager {
     });
     return value;
   }
+  isJump() {
+    return this.anyKeyBindPressed(this.keyBindsJump);
+  }
+  isDrop() {
+    return this.anyKeyBindPressed(this.keyBindsDrop);
+  }
+  isLeft() {
+    return this.anyKeyBindDown(this.keyBindsLeft);
+  }
   isRight() {
-    let value = false;
-    this.keyBindsRight.forEach((element) => {
-      if (this.isKeyDown(element)) {
-        value = true;
-        return;
-      }
-    });
-    return value;
+    return this.anyKeyBindDown(this.keyBindsRight);
   }
 }
