@@ -33,7 +33,7 @@ export default class Player {
   }
   die() {
     this.sounds.playDamage();
-    this.gameScreen.endGame();
+    this.gameScreen.load();
   }
   takeStep() {
     if (

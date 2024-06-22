@@ -12,6 +12,7 @@ export default class GameScreen extends GameState {
     this.content = content;
     this.sound = sound;
     this.debug = new Debug(this);
+    this.debugMode = false;
     this.load();
   }
   update(input) {
@@ -32,7 +33,6 @@ export default class GameScreen extends GameState {
     this.tileset = new Tileset(this);
     this.maps = new Maps(this, this.content.data);
     this.player = new Player(this, this.content.data);
-    this.debugMode = true;
   }
   endGame() {
     this.gameStates.push(
