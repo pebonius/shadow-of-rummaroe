@@ -87,8 +87,8 @@ export default class Debug {
   }
 
   drawPlayerSprite(context) {
-    const playerSprite = this.gameScreen.player.animations.currentSprite;
-    const isFlipped = this.gameScreen.player.animations.flippedX;
+    const playerSprite = this.gameScreen.player.animations.currentFrame.sprite;
+    const isFlipped = this.gameScreen.player.animations.currentFrame.flippedX;
 
     drawText(
       context,

@@ -10,10 +10,10 @@ export default class Player {
     this.gameScreen = gameScreen;
     this.spriteSheet = gameScreen.tileset;
     this.physics = new Physics(this);
-    this.animations = new CharacterAnimations(this);
     this.collisions = new PlayerCollisions(this);
     this.sounds = new CharacterSounds(this);
     this.load(data);
+    this.animations = new CharacterAnimations(this);
   }
   get width() {
     return this.spriteSheet.tileSize;
