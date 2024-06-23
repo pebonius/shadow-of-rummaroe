@@ -15,7 +15,6 @@ export default class CharacterAnimations {
     return this.parentObject.baseSprite;
   }
   defineCycles() {
-    const base = this.baseSprite;
     this.idleCycle = {
       timer: 0,
       frameDuration: 32,
