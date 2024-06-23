@@ -69,7 +69,7 @@ export default class Player {
     this.animations.draw(context);
 
     if (this.gameScreen.debugMode) {
-      this.physics.draw(context); //TODO: remove
+      this.physics.draw(context);
     }
   }
   load(data) {
