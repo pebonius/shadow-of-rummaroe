@@ -17,3 +17,4 @@ Music:
 Sound effects:
 
 - by SubspaceAudio https://opengameart.org/content/512-sound-effects-8-bit-style
+- by Kronbits https://kronbits.itch.io/freesfx

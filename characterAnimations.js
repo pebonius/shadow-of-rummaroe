@@ -98,6 +98,7 @@ export default class CharacterAnimations {
   }
   resetIdleTimer() {
     this.idleTimer = 0;
+    this.idleCycle.timer = 0;
   }
   idle() {
     this.cycleFrames(this.idleCycle);

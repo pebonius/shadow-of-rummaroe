@@ -63,12 +63,12 @@ export default class ContentManager {
     }, "./assets/data.json");
   }
   loadSounds() {
-    const sounds = ["damage", "step"];
+    const sounds = ["damage", "step", "ring", "puroring", "jump"];
 
     sounds.forEach((element) => {
       this.loadAudio((audio) => {
         this[element] = audio;
-      }, `./assets/sounds/${element}.wav`);
+      }, `./assets/sounds/${element}.ogg`);
     });
   }
   loadMusic() {

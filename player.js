@@ -35,25 +35,19 @@ export default class Player {
     this.sounds.playDamage();
     this.gameScreen.load();
   }
-  takeStep() {
-    if (
-      this.physics.isStandingOnGround() &&
-      this.animations.spriteOffset === 2
-    ) {
-      this.sounds.playStep();
-    }
-  }
   handleInput(input) {
     if (input.isLeft()) {
       this.physics.walkLeft();
       this.animations.walkLeft();
+      this.sounds.walk();
     } else if (input.isRight()) {
       this.physics.walkRight();
       this.animations.walkRight();
+      this.sounds.walk();
     }
     if (this.physics.isStandingOnGround() && input.isJump()) {
       this.physics.jump();
-      this.sounds.playStep();
+      this.sounds.playJump();
     }
     if (this.physics.isStandingOnGround() && input.isDrop()) {
       this.physics.drop();
@@ -81,5 +75,6 @@ export default class Player {
     this.baseSprite = data.player.baseSprite;
     this.stepSound = data.player.stepSound;
     this.damageSound = data.player.damageSound;
+    this.jumpSound = data.player.jumpSound;
   }
 }

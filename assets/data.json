@@ -11,7 +11,8 @@
     "maxSpeed": 3,
     "jump": 5,
     "stepSound": "step",
-    "damageSound": "damage"
+    "damageSound": "damage",
+    "jumpSound": "jump"
   },
   "maps": [
     {

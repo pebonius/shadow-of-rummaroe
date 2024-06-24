@@ -41,7 +41,9 @@ export default class SoundManager {
     this._musicVolume = clamp(value, 0, 1);
   }
   playSoundEffect(audio) {
-    this.playAudio(audio);
+    const sound = new Audio();
+    sound.src = audio.src;
+    this.playAudio(sound);
   }
   playMusic(audio, loop) {
     if (audio == null && this.currentMusic == null) {
@@ -78,6 +80,9 @@ export default class SoundManager {
     } else {
       throw new Error(audio.src + " was not ready to be played");
     }
+  }
+  isPlaying(audio) {
+    return !audio.paused && audio.currentTime > 0;
   }
   playAudio(audio) {
     audio.play();
