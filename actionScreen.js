@@ -17,6 +17,7 @@ export default class GameScreen extends GameState {
   }
   update(input) {
     this.player.update(input);
+    this.player.map.update(input);
     if (input.isKeyPressed(input.keys.M)) {
       this.debugMode = !this.debugMode;
     }

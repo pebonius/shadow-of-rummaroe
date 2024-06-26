@@ -11,8 +11,7 @@ export default class Point {
     if (!(a instanceof Point) || !(b instanceof Point)) {
       throw TypeError("Provided a and b must be Points.");
     }
-    let xDist = Math.pow(a.x - b.x, 2);
-    let yDist = Math.pow(a.y - b.y, 2);
-    return Math.sqrt(xDist + yDist);
+    const distance = Math.hypot(a.x - b.x, a.y - b.y);
+    return distance;
   }
 }

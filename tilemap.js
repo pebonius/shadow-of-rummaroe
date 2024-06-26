@@ -1,14 +1,20 @@
 import Debug from "./debug.js";
 import Point from "./point.js";
-import { arrayContains, cloneArray, isNumber } from "./utilities.js";
+import Item from "./item.js";
+import {
+  arrayContains,
+  cloneArray,
+  isNumber,
+  removeDead,
+} from "./utilities.js";
 
 export default class Tilemap {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
     this.tileset = gameScreen.tileset;
     this.tileSize = this.tileset.tileSize;
-    this.load(data);
     this.tilesheet = this.tileset.image;
+    this.load(data);
   }
   toString() {
     return this.name;
@@ -113,10 +119,9 @@ export default class Tilemap {
     );
   }
   drawObjects(context) {
-    // draw objects belonging to this map
-  }
-  drawPlayer(context) {
-    const player = this.gameScreen.player;
+    this.items.forEach((element) => {
+      element.draw(context);
+    });
   }
   draw(context) {
     for (let y = 0; y < this.height; y++)
@@ -125,6 +130,21 @@ export default class Tilemap {
         this.drawTile(pos, context);
       }
     this.drawObjects(context);
+  }
+  updateObjects(input) {
+    removeDead(this.items);
+
+    this.items.forEach((element) => {
+      element.update(input);
+    });
+  }
+  update(input) {
+    this.updateObjects(input);
+  }
+  loadItems(data) {
+    data.items.forEach((element) => {
+      this.items.push(new Item(this.gameScreen, element));
+    });
   }
   load(data) {
     this.name = data.name;
@@ -137,5 +157,7 @@ export default class Tilemap {
     this.spikeTiles = cloneArray(data.spikeTiles);
     this.platformTiles = cloneArray(data.platformTiles);
     this.tiles = cloneArray(data.tiles);
+    this.items = Array();
+    this.loadItems(data);
   }
 }
