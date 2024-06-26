@@ -1,10 +1,13 @@
 import { drawSpriteAtPos } from "./graphics.js";
+import ItemAnimations from "./itemAnimations.js";
 import Point from "./point.js";
+import { randomNumber } from "./utilities.js";
 
 export default class Item {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
     this.load(data);
+    this.animations = new ItemAnimations(this);
   }
   set positionX(value) {
     this.position.x = Math.round(value);
@@ -25,11 +28,11 @@ export default class Item {
         return 1;
     }
   }
-  onCollect() {
-    this.gameScreen.sound.playSoundEffect(this.collectSoundSrc);
-    this.isDead = true;
-  }
   update(input) {
+    this.checkForPlayerCollision();
+    this.animations.update(input);
+  }
+  checkForPlayerCollision() {
     const collectRange = 10;
     const distance = Point.distance(
       this.gameScreen.player.position,
@@ -40,13 +43,12 @@ export default class Item {
       this.onCollect();
     }
   }
+  onCollect() {
+    this.gameScreen.sound.playSoundEffect(this.collectSoundSrc);
+    this.isDead = true;
+  }
   draw(context) {
-    drawSpriteAtPos(
-      context,
-      this.gameScreen.tileset,
-      this.baseSprite,
-      this.position
-    );
+    this.animations.draw(context);
   }
   load(data) {
     this.position = new Point(data.positionX, data.positionY);
