@@ -65,14 +65,12 @@
         {
           "positionX": 16,
           "positionY": 64,
-          "collectSound": "puroring",
-          "sprite": 27
+          "type": "diamond"
         },
         {
           "positionX": 32,
           "positionY": 64,
-          "collectSound": "ring",
-          "sprite": 30
+          "type": "coin"
         }
       ]
     },

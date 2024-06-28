@@ -3,6 +3,7 @@ import GameState from "./gameState.js";
 import Maps from "./maps.js";
 import Player from "./player.js";
 import Tileset from "./tileset.js";
+import Hud from "./hud.js";
 
 export default class GameScreen extends GameState {
   constructor(gameStates, canvas, input, content, sound) {
@@ -18,6 +19,8 @@ export default class GameScreen extends GameState {
   update(input) {
     this.player.update(input);
     this.player.map.update(input);
+    this.hud.update(input);
+
     if (input.isKeyPressed(input.keys.M)) {
       this.debugMode = !this.debugMode;
     }
@@ -25,6 +28,7 @@ export default class GameScreen extends GameState {
   draw(context, canvas) {
     this.player.map.draw(context);
     this.player.draw(context);
+    this.hud.draw(context);
 
     if (this.debugMode) {
       this.debug.draw(context, canvas);
@@ -34,6 +38,8 @@ export default class GameScreen extends GameState {
     this.tileset = new Tileset(this);
     this.maps = new Maps(this, this.content.data);
     this.player = new Player(this, this.content.data);
+    this.gold = 0;
+    this.hud = new Hud(this);
   }
   endGame() {
     this.gameStates.push(
