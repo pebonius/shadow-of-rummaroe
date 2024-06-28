@@ -53,6 +53,32 @@ export class Physics {
   get tileRight() {
     return this.parentObject.map.transformPos(this.rightTouchPoint);
   }
+  get baseLeftPos() {
+    return this.parentObject.map.transformPos(
+      new Point(
+        this.bottomTouchPoint.x - this.baseRadius,
+        this.bottomTouchPoint.y
+      )
+    );
+  }
+  get baseRightPos() {
+    return this.parentObject.map.transformPos(
+      new Point(
+        this.bottomTouchPoint.x + this.baseRadius,
+        this.bottomTouchPoint.y
+      )
+    );
+  }
+  get headLeftPos() {
+    return this.parentObject.map.transformPos(
+      new Point(this.topTouchPoint.x - this.baseRadius, this.topTouchPoint.y)
+    );
+  }
+  get headRightPos() {
+    return this.parentObject.map.transformPos(
+      new Point(this.topTouchPoint.x + this.baseRadius, this.topTouchPoint.y)
+    );
+  }
   get objectiveVelocityX() {
     const pow = Math.pow(this.velocity.x, 2);
     const sqrt = Math.sqrt(pow);
@@ -93,15 +119,28 @@ export class Physics {
     });
   }
   updatePosByVelocity() {
-    this.parentObject.positionX =
-      this.velocity.x + this.parentObject.position.x;
+    const map = this.parentObject.map;
+
+    if (
+      (this.velocity.x > 0 && map.isWall(this.tileRight)) ||
+      (this.velocity.x < 0 && map.isWall(this.tileLeft)) ||
+      (this.isDropping &&
+        this.velocity.x > 0 &&
+        map.isWall(this.baseRightPos)) ||
+      (this.isDropping && this.velocity.x < 0 && map.isWall(this.baseLeftPos))
+    ) {
+      this.velocityX = 0;
+    } else {
+      this.parentObject.positionX =
+        this.velocity.x + this.parentObject.position.x;
+    }
 
     if (
       this.velocity.y < 0 &&
-      !(
-        this.parentObject.map.isWalkable(this.tileAbove) ||
-        this.parentObject.map.isPlatform(this.tileAbove)
-      )
+      (map.isWall(this.tileAbove) ||
+        map.isWall(this.headLeftPos) ||
+        map.isWall(this.headRightPos)) &&
+      !map.isPlatform(this.tileAbove)
     ) {
       this.velocityY = 0;
     } else {
@@ -144,22 +183,10 @@ export class Physics {
     }
   }
   isStandingOnGround() {
-    const baseLeftPos = this.parentObject.map.transformPos(
-      new Point(
-        this.bottomTouchPoint.x - this.baseRadius,
-        this.bottomTouchPoint.y
-      )
-    );
-    const baseRightPos = this.parentObject.map.transformPos(
-      new Point(
-        this.bottomTouchPoint.x + this.baseRadius,
-        this.bottomTouchPoint.y
-      )
-    );
     return (
       this.parentObject.map.isWall(this.tileBelow) ||
-      this.parentObject.map.isWall(baseLeftPos) ||
-      this.parentObject.map.isWall(baseRightPos) ||
+      this.parentObject.map.isWall(this.baseLeftPos) ||
+      this.parentObject.map.isWall(this.baseRightPos) ||
       this.isOnPlatform()
     );
   }
@@ -175,17 +202,13 @@ export class Physics {
     if (!this.canWalkLeft()) {
       return;
     }
-    if (this.velocityX > -this.parentObject.maxSpeed) {
-      this.velocityX = -1;
-    }
+    this.velocityX = -1;
   }
   walkRight() {
     if (!this.canWalkRight()) {
       return;
     }
-    if (this.velocityX < this.parentObject.maxSpeed) {
-      this.velocityX = 1;
-    }
+    this.velocityX = 1;
   }
   canWalkLeft() {
     return (
