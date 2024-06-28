@@ -71,6 +71,7 @@ export default class Item {
     this.gameScreen.sound.playSoundEffect(this.soundSrc);
     this.gameScreen.gold += this.price;
     this.isDead = true;
+    this.gameScreen.deadItemIds.push(this.id);
   }
   draw(context) {
     this.animations.draw(context);
@@ -78,5 +79,6 @@ export default class Item {
   load(data) {
     this.position = new Point(data.positionX, data.positionY);
     this.type = data.type;
+    this.id = data.id;
   }
 }

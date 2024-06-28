@@ -143,7 +143,9 @@ export default class Tilemap {
   }
   loadItems(data) {
     data.items.forEach((element) => {
-      this.items.push(new Item(this.gameScreen, element));
+      if (!arrayContains(this.gameScreen.deadItemIds, element.id)) {
+        this.items.push(new Item(this.gameScreen, element));
+      }
     });
   }
   load(data) {
