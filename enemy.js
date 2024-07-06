@@ -67,7 +67,7 @@ export default class Enemy {
     }
   }
   checkForPlayerCollision() {
-    const range = 9;
+    const range = 8;
     const distance = Point.distance(this.gameScreen.player.center, this.center);
 
     if (distance < range) {
