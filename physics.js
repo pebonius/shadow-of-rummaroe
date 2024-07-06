@@ -1,12 +1,13 @@
 import { drawRectangle } from "./graphics.js";
 import Point from "./point.js";
 
-export class Physics {
+export default class Physics {
   constructor(parentObject) {
     this.parentObject = parentObject;
     this.velocity = new Point(0, 0);
     this.baseRadius = 2;
     this.damping = 0.9;
+    this.walkSpeed = 1;
     this.isDropping = false;
   }
   get bottomTouchPoint() {
@@ -94,7 +95,7 @@ export class Physics {
     return this.velocity.x;
   }
   set velocityX(value) {
-    this.velocity.x = Math.round(value);
+    this.velocity.x = value;
   }
   get velocityY() {
     return this.velocity.y;
@@ -153,10 +154,10 @@ export class Physics {
     this.velocityY *= this.damping;
   }
   floorVelocity() {
-    if (this.objectiveVelocityX < 1) {
+    if (this.objectiveVelocityX < 0.1) {
       this.velocityX = 0;
     }
-    if (this.objectiveVelocityY < 1) {
+    if (this.objectiveVelocityY < 0.1) {
       this.velocityY = 0;
     }
   }
@@ -202,13 +203,13 @@ export class Physics {
     if (!this.canWalkLeft()) {
       return;
     }
-    this.velocityX = -1;
+    this.velocityX = -this.walkSpeed;
   }
   walkRight() {
     if (!this.canWalkRight()) {
       return;
     }
-    this.velocityX = 1;
+    this.velocityX = this.walkSpeed;
   }
   canWalkLeft() {
     return (
@@ -225,6 +226,10 @@ export class Physics {
   jump() {
     this.velocityY = 0;
     this.velocityY -= this.parentObject.jump;
+  }
+  highJump() {
+    this.velocityY = 0;
+    this.velocityY -= this.parentObject.jump * 1.5;
   }
   drop() {
     if (this.parentObject.map.isPlatform(this.tileBelow)) {

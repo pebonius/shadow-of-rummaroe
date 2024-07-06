@@ -1,7 +1,7 @@
 import CharacterAnimations from "./characterAnimations.js";
 import CharacterSounds from "./characterSounds.js";
 import Debug from "./debug.js";
-import { Physics } from "./physics.js";
+import Physics from "./physics.js";
 import PlayerCollisions from "./playerCollisions.js";
 import Point from "./point.js";
 
@@ -27,6 +27,10 @@ export default class Player {
   set positionY(value) {
     this.position.y = Math.round(value);
   }
+  get center() {
+    const half = this.spriteSheet.tileSize * 0.5;
+    return new Point(this.position.x + half, this.position.y + half);
+  }
   enterMap(map) {
     this.map = map;
     map.onEnter(this);
@@ -34,6 +38,10 @@ export default class Player {
   die() {
     this.sounds.playDamage();
     this.gameScreen.load();
+  }
+  enemyJump() {
+    this.physics.highJump();
+    this.sounds.playJump();
   }
   handleInput(input) {
     if (input.isLeft()) {

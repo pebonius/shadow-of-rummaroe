@@ -7,6 +7,7 @@ import {
   isNumber,
   removeDead,
 } from "./utilities.js";
+import Enemy from "./enemy.js";
 
 export default class Tilemap {
   constructor(gameScreen, data) {
@@ -122,6 +123,10 @@ export default class Tilemap {
     this.items.forEach((element) => {
       element.draw(context);
     });
+
+    this.enemies.forEach((element) => {
+      element.draw(context);
+    });
   }
   draw(context) {
     for (let y = 0; y < this.height; y++)
@@ -133,8 +138,13 @@ export default class Tilemap {
   }
   updateObjects(input) {
     removeDead(this.items);
+    removeDead(this.enemies);
 
     this.items.forEach((element) => {
+      element.update(input);
+    });
+
+    this.enemies.forEach((element) => {
       element.update(input);
     });
   }
@@ -146,6 +156,11 @@ export default class Tilemap {
       if (!arrayContains(this.gameScreen.deadItemIds, element.id)) {
         this.items.push(new Item(this.gameScreen, element));
       }
+    });
+  }
+  loadEnemies(data) {
+    data.enemies.forEach((element) => {
+      this.enemies.push(new Enemy(this.gameScreen, element, this));
     });
   }
   load(data) {
@@ -161,5 +176,7 @@ export default class Tilemap {
     this.tiles = cloneArray(data.tiles);
     this.items = Array();
     this.loadItems(data);
+    this.enemies = Array();
+    this.loadEnemies(data);
   }
 }
