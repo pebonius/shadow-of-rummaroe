@@ -60,6 +60,29 @@ export default class CharacterAnimations {
         },
       ],
     };
+    this.stunnedCycle = {
+      timer: 0,
+      frameDuration: 8,
+      currentFrameId: 0,
+      frames: [
+        {
+          sprite: this.baseSprite,
+          flippedX: false,
+        },
+        {
+          sprite: this.baseSprite + 2,
+          flippedX: true,
+        },
+        {
+          sprite: this.baseSprite + 1,
+          flippedX: false,
+        },
+        {
+          sprite: this.baseSprite + 2,
+          flippedX: false,
+        },
+      ],
+    };
   }
   getNextFrameId(frames, currentId) {
     if (currentId < frames.length - 1) {
@@ -95,6 +118,11 @@ export default class CharacterAnimations {
       this.cycleFrames(this.walkRightCycle);
       this.currentFrame = this.getCurrentCycleFrame(this.walkRightCycle);
     }
+  }
+  beStunned() {
+    this.resetIdleTimer();
+    this.cycleFrames(this.stunnedCycle);
+    this.currentFrame = this.getCurrentCycleFrame(this.stunnedCycle);
   }
   resetIdleTimer() {
     this.idleTimer = 0;

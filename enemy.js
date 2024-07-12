@@ -14,7 +14,7 @@ export default class Enemy {
     this.animations = new CharacterAnimations(this);
     this.walkLeft = true;
     this.stunTimer = 0;
-    this.stunCooldown = 32;
+    this.stunCooldown = 96;
   }
   get width() {
     return this.spriteSheet.tileSize;
@@ -36,11 +36,11 @@ export default class Enemy {
     return 4;
   }
   walkAround() {
-    if (this.walkLeft && !this.physics.canWalkLeft()) {
+    if (this.encounteredObstacleLeft()) {
       this.walkLeft = false;
     }
 
-    if (!this.walkLeft && !this.physics.canWalkRight()) {
+    if (this.encounteredObstacleRight()) {
       this.walkLeft = true;
     }
 
@@ -52,12 +52,25 @@ export default class Enemy {
       this.animations.walkRight();
     }
   }
+  encounteredObstacleLeft() {
+    return this.walkLeft && !this.physics.canWalkLeft();
+  }
+  encounteredObstacleRight() {
+    return !this.walkLeft && !this.physics.canWalkRight();
+  }
   onStunned() {
     this.stunTimer = this.stunCooldown;
   }
+  isStunned() {
+    return this.stunTimer > 0;
+  }
+  actStunned() {
+    this.stunTimer--;
+    this.animations.beStunned();
+  }
   onCollide() {
     const player = this.gameScreen.player;
-    const minVerticalDifference = 4;
+    const minVerticalDifference = 3;
 
     if (player.center.y < this.center.y - minVerticalDifference) {
       this.onStunned();
@@ -77,10 +90,10 @@ export default class Enemy {
   update(input) {
     this.physics.update();
     this.animations.update();
-
     this.checkForPlayerCollision();
-    if (this.stunTimer > 0) {
-      this.stunTimer--;
+
+    if (this.isStunned()) {
+      this.actStunned();
     } else {
       this.walkAround();
     }
