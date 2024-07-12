@@ -101,7 +101,9 @@
         [131, 131, 131, 131, 131, 131, 131, 131, 131, 131]
       ],
       "items": [],
-      "enemies": []
+      "enemies": [
+        { "type": "bug", "positionX": 64, "positionY": 48, "walkLeft": true }
+      ]
     },
     {
       "name": "3",
@@ -126,7 +128,9 @@
         [131, 108, 131, 131, 131, 131, 131, 131, 131, 131]
       ],
       "items": [],
-      "enemies": [{ "positionX": 112, "positionY": 80 }]
+      "enemies": [
+        { "type": "bug", "positionX": 112, "positionY": 80, "walkLeft": true }
+      ]
     }
   ]
 }

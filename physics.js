@@ -54,6 +54,16 @@ export default class Physics {
   get tileRight() {
     return this.parentObject.map.transformPos(this.rightTouchPoint);
   }
+  get tileBelowLeft() {
+    return this.parentObject.map.transformPos(
+      new Point(this.leftTouchPoint.x, this.bottomTouchPoint.y)
+    );
+  }
+  get tileBelowRight() {
+    return this.parentObject.map.transformPos(
+      new Point(this.rightTouchPoint.x, this.bottomTouchPoint.y)
+    );
+  }
   get baseLeftPos() {
     return this.parentObject.map.transformPos(
       new Point(
@@ -177,8 +187,9 @@ export default class Physics {
   }
   checkDrop() {
     if (
-      this.bottomTouchPoint.y >=
-      this.startDropPosY + this.parentObject.map.tileSize
+      this.bottomTouchPoint.y >
+        this.startDropPosY + this.parentObject.map.tileSize ||
+      this.bottomTouchPoint.y < this.startDropPosY
     ) {
       this.isDropping = false;
     }

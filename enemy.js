@@ -12,7 +12,6 @@ export default class Enemy {
     this.sounds = new CharacterSounds(this);
     this.load(data);
     this.animations = new CharacterAnimations(this);
-    this.walkLeft = true;
     this.stunTimer = 0;
     this.stunCooldown = 96;
   }
@@ -32,15 +31,12 @@ export default class Enemy {
     const half = this.spriteSheet.tileSize * 0.5;
     return new Point(this.position.x + half, this.position.y + half);
   }
-  get baseSprite() {
-    return 4;
-  }
   walkAround() {
-    if (this.encounteredObstacleLeft()) {
+    if (this.walkLeft && this.encounteredObstacleLeft()) {
       this.walkLeft = false;
     }
 
-    if (this.encounteredObstacleRight()) {
+    if (!this.walkLeft && this.encounteredObstacleRight()) {
       this.walkLeft = true;
     }
 
@@ -53,10 +49,16 @@ export default class Enemy {
     }
   }
   encounteredObstacleLeft() {
-    return this.walkLeft && !this.physics.canWalkLeft();
+    return (
+      !this.physics.canWalkLeft() ||
+      this.map.isWalkable(this.physics.tileBelowLeft)
+    );
   }
   encounteredObstacleRight() {
-    return !this.walkLeft && !this.physics.canWalkRight();
+    return (
+      !this.physics.canWalkRight() ||
+      this.map.isWalkable(this.physics.tileBelowRight)
+    );
   }
   onStunned() {
     this.stunTimer = this.stunCooldown;
@@ -100,9 +102,25 @@ export default class Enemy {
   }
   draw(context) {
     this.animations.draw(context);
+
+    if (this.gameScreen.debugMode) {
+      this.physics.draw(context);
+    }
+  }
+  applyType(type) {
+    this.type = type;
+    switch (this.type) {
+      case "bug":
+        this.baseSprite = 4;
+        break;
+      default:
+        this.baseSprite = 229;
+        break;
+    }
   }
   load(data) {
+    this.applyType(data.type);
     this.position = new Point(data.positionX, data.positionY);
-    //this.type = data.type;
+    this.walkLeft = data.walkLeft;
   }
 }
