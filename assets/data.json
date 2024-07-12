@@ -63,21 +63,9 @@
         [131, 131, 131, 131, 131, 131, 131, 131, 131, 131]
       ],
       "items": [
-        {
-          "positionX": 16,
-          "positionY": 64,
-          "type": "diamond"
-        },
-        {
-          "positionX": 48,
-          "positionY": 64,
-          "type": "coin"
-        },
-        {
-          "positionX": 80,
-          "positionY": 64,
-          "type": "coin"
-        }
+        { "type": "diamond", "positionX": 16, "positionY": 64 },
+        { "type": "coin", "positionX": 48, "positionY": 64 },
+        { "type": "coin", "positionX": 80, "positionY": 64 }
       ],
       "enemies": []
     },
