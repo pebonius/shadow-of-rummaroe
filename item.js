@@ -7,6 +7,7 @@ export default class Item {
   constructor(gameScreen, data, id, map) {
     this.gameScreen = gameScreen;
     this.map = map;
+    this.id = id;
     this.load(data);
     this.animations = new ItemAnimations(this);
   }
@@ -73,6 +74,9 @@ export default class Item {
     this.gameScreen.sound.playSoundEffect(this.soundSrc);
     this.gameScreen.gold += this.price;
     this.isDead = true;
+    if (arrayContains(this.gameScreen.deadItemIds, this.id)) {
+      Debug.log(`id ${this.id} is assigned to more than one item!!!!!!1!!`);
+    }
     this.gameScreen.deadItemIds.push(this.id);
   }
   draw(context) {
@@ -81,5 +85,6 @@ export default class Item {
   load(data) {
     this.position = new Point(data.positionX, data.positionY);
     this.type = data.type;
+    Debug.log(this.id);
   }
 }
