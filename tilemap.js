@@ -151,10 +151,14 @@ export default class Tilemap {
   update(input) {
     this.updateObjects(input);
   }
+  constructItemId(data) {
+    return `${this.name}m${data.positionX}${data.positionY}${data.type}`;
+  }
   loadItems(data) {
     data.items.forEach((element) => {
-      if (!arrayContains(this.gameScreen.deadItemIds, element.id)) {
-        this.items.push(new Item(this.gameScreen, element));
+      const id = this.constructItemId(element);
+      if (!arrayContains(this.gameScreen.deadItemIds, id)) {
+        this.items.push(new Item(this.gameScreen, element, id, this));
       }
     });
   }

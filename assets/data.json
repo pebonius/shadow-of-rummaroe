@@ -64,19 +64,16 @@
       ],
       "items": [
         {
-          "id": 1,
           "positionX": 16,
           "positionY": 64,
           "type": "diamond"
         },
         {
-          "id": 2,
           "positionX": 48,
           "positionY": 64,
           "type": "coin"
         },
         {
-          "id": 3,
           "positionX": 80,
           "positionY": 64,
           "type": "coin"
