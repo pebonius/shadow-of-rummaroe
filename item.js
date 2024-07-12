@@ -73,9 +73,6 @@ export default class Item {
     this.gameScreen.sound.playSoundEffect(this.soundSrc);
     this.gameScreen.gold += this.price;
     this.isDead = true;
-    if (arrayContains(this.gameScreen.deadItemIds, this.id)) {
-      Debug.log(`id ${this.id} is assigned to more than one item!!!!!!!!`);
-    }
     this.gameScreen.deadItemIds.push(this.id);
   }
   draw(context) {
