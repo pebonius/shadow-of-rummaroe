@@ -1,6 +1,7 @@
+import Debug from "./debug.js";
 import ItemAnimations from "./itemAnimations.js";
 import Point from "./point.js";
-import { isDefined } from "./utilities.js";
+import { arrayContains, isDefined } from "./utilities.js";
 
 export default class Item {
   constructor(gameScreen, data) {
@@ -71,6 +72,9 @@ export default class Item {
     this.gameScreen.sound.playSoundEffect(this.soundSrc);
     this.gameScreen.gold += this.price;
     this.isDead = true;
+    if (arrayContains(this.gameScreen.deadItemIds, this.id)) {
+      Debug.log(`id ${this.id} is assigned to more than one item!!!!!!1!!`);
+    }
     this.gameScreen.deadItemIds.push(this.id);
   }
   draw(context) {
