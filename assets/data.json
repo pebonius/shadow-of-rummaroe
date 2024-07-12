@@ -102,7 +102,7 @@
       ],
       "items": [],
       "enemies": [
-        { "type": "bug", "positionX": 64, "positionY": 48, "walkLeft": true }
+        { "type": "ant", "positionX": 64, "positionY": 48, "walkLeft": true }
       ]
     },
     {

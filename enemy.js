@@ -113,8 +113,17 @@ export default class Enemy {
       case "bug":
         this.baseSprite = 4;
         break;
+      case "slime":
+        this.baseSprite = 20;
+        break;
+      case "skeleton":
+        this.baseSprite = 36;
+        break;
+      case "ant":
+        this.baseSprite = 52;
+        break;
       default:
-        this.baseSprite = 229;
+        this.baseSprite = 227;
         break;
     }
   }
