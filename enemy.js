@@ -14,6 +14,7 @@ export default class Enemy {
     this.animations = new CharacterAnimations(this);
     this.stunTimer = 0;
     this.stunCooldown = 96;
+    this.state = "normal";
   }
   get width() {
     return this.spriteSheet.tileSize;
@@ -61,14 +62,16 @@ export default class Enemy {
     );
   }
   onStunned() {
+    this.state = "stunned";
     this.stunTimer = this.stunCooldown;
   }
-  isStunned() {
-    return this.stunTimer > 0;
-  }
   actStunned() {
-    this.stunTimer--;
-    this.animations.playStunned();
+    if (this.stunTimer > 0) {
+      this.stunTimer--;
+      this.animations.playStunned();
+    } else {
+      this.state = "normal";
+    }
   }
   onCollide() {
     const player = this.gameScreen.player;
@@ -79,6 +82,7 @@ export default class Enemy {
       player.enemyJump();
     } else {
       player.onHurt();
+      this.state = "frozen";
     }
   }
   checkForPlayerCollision() {
@@ -90,14 +94,23 @@ export default class Enemy {
     }
   }
   update(input) {
-    this.physics.update();
-    this.animations.update();
-    this.checkForPlayerCollision();
-
-    if (this.isStunned()) {
-      this.actStunned();
-    } else {
-      this.walkAround();
+    switch (this.state) {
+      case "normal":
+        this.physics.update();
+        this.animations.update();
+        this.checkForPlayerCollision();
+        this.walkAround();
+        break;
+      case "stunned":
+        this.physics.update();
+        this.animations.update();
+        this.checkForPlayerCollision();
+        this.actStunned();
+        break;
+      case "frozen":
+        break;
+      default:
+        throw new Error(`enemy <${this.type}> put in unrecognized state`);
     }
   }
   draw(context) {
