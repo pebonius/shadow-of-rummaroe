@@ -27,7 +27,7 @@ export default class PlayerCollisions {
     const tilePos = this.map.transformPos(this.spikeTouchPoint);
 
     if (this.map.isSpikes(tilePos)) {
-      this.player.die();
+      this.player.onHurt();
     }
   }
   checkForMapBorders() {

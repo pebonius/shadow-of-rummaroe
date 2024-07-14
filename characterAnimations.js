@@ -101,7 +101,7 @@ export default class CharacterAnimations {
       );
     } else cycle.timer--;
   }
-  walkLeft() {
+  playWalkLeft() {
     this.resetIdleTimer();
     if (!this.parentObject.physics.isStandingOnGround()) {
       this.currentFrame = this.walkLeftCycle.frames[1];
@@ -110,7 +110,7 @@ export default class CharacterAnimations {
       this.currentFrame = this.getCurrentCycleFrame(this.walkLeftCycle);
     }
   }
-  walkRight() {
+  playWalkRight() {
     this.resetIdleTimer();
     if (!this.parentObject.physics.isStandingOnGround()) {
       this.currentFrame = this.walkRightCycle.frames[1];
@@ -119,7 +119,7 @@ export default class CharacterAnimations {
       this.currentFrame = this.getCurrentCycleFrame(this.walkRightCycle);
     }
   }
-  beStunned() {
+  playStunned() {
     this.resetIdleTimer();
     this.cycleFrames(this.stunnedCycle);
     this.currentFrame = this.getCurrentCycleFrame(this.stunnedCycle);

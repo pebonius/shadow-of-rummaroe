@@ -41,22 +41,22 @@ export default class Enemy {
     }
 
     if (this.walkLeft) {
-      this.physics.walkLeft();
-      this.animations.walkLeft();
+      this.physics.moveLeft();
+      this.animations.playWalkLeft();
     } else {
-      this.physics.walkRight();
-      this.animations.walkRight();
+      this.physics.moveRight();
+      this.animations.playWalkRight();
     }
   }
   encounteredObstacleLeft() {
     return (
-      !this.physics.canWalkLeft() ||
+      !this.physics.canMoveLeft() ||
       this.map.isWalkable(this.physics.tileBelowLeft)
     );
   }
   encounteredObstacleRight() {
     return (
-      !this.physics.canWalkRight() ||
+      !this.physics.canMoveRight() ||
       this.map.isWalkable(this.physics.tileBelowRight)
     );
   }
@@ -68,7 +68,7 @@ export default class Enemy {
   }
   actStunned() {
     this.stunTimer--;
-    this.animations.beStunned();
+    this.animations.playStunned();
   }
   onCollide() {
     const player = this.gameScreen.player;
@@ -78,7 +78,7 @@ export default class Enemy {
       this.onStunned();
       player.enemyJump();
     } else {
-      player.die();
+      player.onHurt();
     }
   }
   checkForPlayerCollision() {

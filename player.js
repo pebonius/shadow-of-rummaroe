@@ -14,6 +14,9 @@ export default class Player {
     this.sounds = new CharacterSounds(this);
     this.load(data);
     this.animations = new CharacterAnimations(this);
+    this.deathAnimationTimer = 0;
+    this.deathAnimationDuration = 60;
+    this.state = "normal";
   }
   get width() {
     return this.spriteSheet.tileSize;
@@ -35,22 +38,33 @@ export default class Player {
     this.map = map;
     map.onEnter(this);
   }
-  die() {
+  onHurt() {
+    this.state = "dying";
     this.sounds.playDamage();
-    this.gameScreen.load();
+  }
+  actDying() {
+    if (this.deathAnimationTimer <= this.deathAnimationDuration) {
+      this.animations.playStunned();
+      this.deathAnimationTimer++;
+    } else {
+      this.onDeath();
+    }
+  }
+  onDeath() {
+    this.gameScreen.endGame();
   }
   enemyJump() {
-    this.physics.highJump();
+    this.physics.bounce();
     this.sounds.playJump();
   }
   handleInput(input) {
     if (input.isLeft()) {
-      this.physics.walkLeft();
-      this.animations.walkLeft();
+      this.physics.moveLeft();
+      this.animations.playWalkLeft();
       this.sounds.walk();
     } else if (input.isRight()) {
-      this.physics.walkRight();
-      this.animations.walkRight();
+      this.physics.moveRight();
+      this.animations.playWalkRight();
       this.sounds.walk();
     }
     if (this.physics.isStandingOnGround() && input.isJump()) {
@@ -62,10 +76,20 @@ export default class Player {
     }
   }
   update(input) {
-    this.physics.update();
-    this.collisions.update();
-    this.handleInput(input);
-    this.animations.update();
+    switch (this.state) {
+      case "normal":
+        this.physics.update();
+        this.collisions.update();
+        this.handleInput(input);
+        this.animations.update();
+        break;
+      case "dying":
+        this.actDying();
+        this.animations.update();
+        break;
+      default:
+        throw new Error("player put in unrecognized state");
+    }
   }
   draw(context) {
     this.animations.draw(context);

@@ -210,25 +210,25 @@ export default class Physics {
       this.bottomTouchPoint.y - topOfTileBelow > -2
     );
   }
-  walkLeft() {
-    if (!this.canWalkLeft()) {
+  moveLeft() {
+    if (!this.canMoveLeft()) {
       return;
     }
     this.velocityX = -this.walkSpeed;
   }
-  walkRight() {
-    if (!this.canWalkRight()) {
+  moveRight() {
+    if (!this.canMoveRight()) {
       return;
     }
     this.velocityX = this.walkSpeed;
   }
-  canWalkLeft() {
+  canMoveLeft() {
     return (
       this.parentObject.map.isWalkable(this.tileLeft) ||
       this.parentObject.map.isPlatform(this.tileLeft)
     );
   }
-  canWalkRight() {
+  canMoveRight() {
     return (
       this.parentObject.map.isWalkable(this.tileRight) ||
       this.parentObject.map.isPlatform(this.tileRight)
@@ -238,7 +238,7 @@ export default class Physics {
     this.velocityY = 0;
     this.velocityY -= this.parentObject.jump;
   }
-  highJump() {
+  bounce() {
     this.velocityY = 0;
     this.velocityY -= this.parentObject.jump * 1.5;
   }
