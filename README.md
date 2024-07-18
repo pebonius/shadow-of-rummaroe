@@ -12,7 +12,8 @@ Tile art and sprites:
 
 Music:
 
-- Another August by The Cynic Project / cynicmusic.com / pixelsphere.org https://opengameart.org/content/another-august
+- "Another August" by The Cynic Project / cynicmusic.com / pixelsphere.org https://opengameart.org/content/another-august
+- "I Want to go Home" by Eldritch Grim, Rafael Krux https://opengameart.org/content/i-want-to-go-home
 
 Sound effects:
 

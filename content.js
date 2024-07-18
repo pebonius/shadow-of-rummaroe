@@ -72,7 +72,7 @@ export default class ContentManager {
     });
   }
   loadMusic() {
-    const tracks = ["another-august"];
+    const tracks = ["another-august", "i_want_to_go_home"];
 
     tracks.forEach((element) => {
       this.loadAudio((audio) => {

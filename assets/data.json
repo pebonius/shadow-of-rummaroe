@@ -125,7 +125,7 @@
     },
     {
       "name": "map4",
-      "music": null,
+      "music": "i_want_to_go_home",
       "mapAbove": null,
       "mapBelow": null,
       "mapLeft": 3,
@@ -152,7 +152,7 @@
     },
     {
       "name": "map5",
-      "music": null,
+      "music": "i_want_to_go_home",
       "mapAbove": null,
       "mapBelow": null,
       "mapLeft": 4,
@@ -177,7 +177,7 @@
     },
     {
       "name": "map6",
-      "music": null,
+      "music": "i_want_to_go_home",
       "mapAbove": null,
       "mapBelow": null,
       "mapLeft": 5,
