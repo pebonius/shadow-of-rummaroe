@@ -1,5 +1,5 @@
 import Debug from "./debug.js";
-import { clamp } from "./utilities.js";
+import { clamp, isDefined } from "./utilities.js";
 
 export default class SoundManager {
   constructor() {
@@ -13,10 +13,10 @@ export default class SoundManager {
   set currentMusic(value) {
     this._currentMusic = value;
   }
-  get currentMusicLoop() {
+  get isCurrentMusicLooped() {
     return this._currentMusic.loop;
   }
-  set currentMusicLoop(value) {
+  set isCurrentMusicLooped(value) {
     if (value !== true && value !== false) {
       throw new TypeError("currentMusicLoop must be a bool");
     }
@@ -46,33 +46,32 @@ export default class SoundManager {
     this.playAudio(sound);
   }
   playMusic(audio, loop) {
-    if (audio == null && this.currentMusic == null) {
-      // nothing happens, no music was or is playing
-    } else if (audio == null && this.currentMusic != null) {
-      this.stopMusic();
-    } else if (audio != null && this.currentMusic == null) {
+    if (!isDefined(audio)) {
+      throw new TypeError(`audio is null or undefined`);
+    }
+
+    if (typeof loop != "boolean") {
+      throw new TypeError(`loop must be a bool`);
+    }
+
+    if (this.currentMusic == null) {
       this.playNewMusic(audio, loop);
-    } else if (
-      audio != null &&
-      this.currentMusic != null &&
-      audio.src != this.currentMusic.src
-    ) {
+      return;
+    }
+
+    if (this.currentMusic != null && audio.src != this.currentMusic.src) {
       this.stopMusic();
       this.playNewMusic(audio, loop);
-    } else if (
-      audio != null &&
-      this.currentMusic != null &&
-      audio.src == this.currentMusic.src
-    ) {
-      // nothing happens, same music still plays
-    } else {
-      Debug.log(audio);
-      Debug.log(this.currentMusic);
+      return;
+    }
+
+    if (this.currentMusic != null && audio.src == this.currentMusic.src) {
+      return;
     }
   }
   playNewMusic(audio, loop) {
     this.currentMusic = audio;
-    this.currentMusicLoop = loop;
+    this.isCurrentMusicLooped = loop;
     this.currentMusicVolume = this.musicVolume;
 
     if (audio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
@@ -88,6 +87,9 @@ export default class SoundManager {
     audio.play();
   }
   stopMusic() {
+    if (this.currentMusic === null) {
+      return;
+    }
     this.stopAudio(this.currentMusic);
     this.currentMusic = null;
   }

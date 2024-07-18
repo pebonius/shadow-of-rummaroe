@@ -30,11 +30,12 @@ export default class Tilemap {
     this.playMusic();
   }
   playMusic() {
-    if (this.music === null) {
+    if (this.music === null || this.music === "") {
+      this.gameScreen.sound.stopMusic();
       return;
     }
-    const mapMusic = this.gameScreen.content.getAssetByName(this.music);
-    this.gameScreen.sound.playMusic(mapMusic, true);
+    const musicAsset = this.gameScreen.content.getAssetByName(this.music);
+    this.gameScreen.sound.playMusic(musicAsset, true);
   }
   containsPosition(pos) {
     return (
