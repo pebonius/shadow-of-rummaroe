@@ -41,13 +41,21 @@ export default class SoundManager {
     this._musicVolume = clamp(value, 0, 1);
   }
   playSoundEffect(audio) {
+    if (!(audio instanceof HTMLAudioElement)) {
+      throw new TypeError(`audio must be a HTMLAudioElement`);
+    }
+
+    if (audio.src === "") {
+      throw new Error("audio src was empty");
+    }
+
     const sound = new Audio();
     sound.src = audio.src;
     this.playAudio(sound);
   }
   playMusic(audio, loop) {
-    if (!isDefined(audio)) {
-      throw new TypeError(`audio is null or undefined`);
+    if (!(audio instanceof HTMLAudioElement)) {
+      throw new TypeError(`audio must be a HTMLAudioElement`);
     }
 
     if (typeof loop != "boolean") {
@@ -70,6 +78,14 @@ export default class SoundManager {
     }
   }
   playNewMusic(audio, loop) {
+    if (!(audio instanceof HTMLAudioElement)) {
+      throw new TypeError(`audio must be a HTMLAudioElement`);
+    }
+
+    if (typeof loop != "boolean") {
+      throw new TypeError(`loop must be a bool`);
+    }
+
     this.currentMusic = audio;
     this.isCurrentMusicLooped = loop;
     this.currentMusicVolume = this.musicVolume;
@@ -81,19 +97,32 @@ export default class SoundManager {
     }
   }
   isPlaying(audio) {
+    if (!(audio instanceof HTMLAudioElement)) {
+      throw new TypeError(`audio must be a HTMLAudioElement`);
+    }
+
     return !audio.paused && audio.currentTime > 0;
   }
   playAudio(audio) {
+    if (!(audio instanceof HTMLAudioElement)) {
+      throw new TypeError(`audio must be a HTMLAudioElement`);
+    }
+
     audio.play();
   }
   stopMusic() {
     if (this.currentMusic === null) {
       return;
     }
+
     this.stopAudio(this.currentMusic);
     this.currentMusic = null;
   }
   stopAudio(audio) {
+    if (!(audio instanceof HTMLAudioElement)) {
+      throw new TypeError(`audio must be a HTMLAudioElement`);
+    }
+
     audio.volume = 0;
     audio.pause();
     audio.currentTime = 0;
