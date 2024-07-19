@@ -78,22 +78,22 @@ export default class Tilemap {
   }
   isWalkable(pos) {
     const tile = this.getTile(pos);
-    return arrayContains(this.walkableTiles, tile) || this.isSpikes(pos);
+    return arrayContains(this.gameScreen.tileset.walkableTiles, tile) || this.isSpikes(pos);
   }
   isSpikes(pos) {
     const tile = this.getTile(pos);
-    return arrayContains(this.spikeTiles, tile);
+    return arrayContains(this.gameScreen.tileset.spikeTiles, tile);
   }
   isPlatform(pos) {
     const tile = this.getTile(pos);
-    return arrayContains(this.platformTiles, tile);
+    return arrayContains(this.gameScreen.tileset.platformTiles, tile);
   }
   isWall(pos) {
     const tile = this.getTile(pos);
     return (
-      !arrayContains(this.walkableTiles, tile) &&
-      !arrayContains(this.platformTiles, tile) &&
-      !arrayContains(this.spikeTiles, tile)
+      !arrayContains(this.gameScreen.tileset.walkableTiles, tile) &&
+      !arrayContains(this.gameScreen.tileset.platformTiles, tile) &&
+      !arrayContains(this.gameScreen.tileset.spikeTiles, tile)
     );
   }
   drawTile(pos, context) {
@@ -175,9 +175,6 @@ export default class Tilemap {
     this.mapBelow = data.mapBelow;
     this.mapLeft = data.mapLeft;
     this.mapRight = data.mapRight;
-    this.walkableTiles = cloneArray(data.walkableTiles);
-    this.spikeTiles = cloneArray(data.spikeTiles);
-    this.platformTiles = cloneArray(data.platformTiles);
     this.tiles = cloneArray(data.tiles);
     this.items = Array();
     this.loadItems(data);
