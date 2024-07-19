@@ -78,29 +78,26 @@ export default class Tilemap {
   }
   isWalkable(pos) {
     const tile = this.getTile(pos);
-    return arrayContains(this.gameScreen.tileset.walkableTiles, tile) || this.isSpikes(pos);
+    return arrayContains(this.tileset.walkableTiles, tile) || this.isSpikes(pos);
   }
   isSpikes(pos) {
     const tile = this.getTile(pos);
-    return arrayContains(this.gameScreen.tileset.spikeTiles, tile);
+    return arrayContains(this.tileset.spikeTiles, tile);
   }
   isPlatform(pos) {
     const tile = this.getTile(pos);
-    return arrayContains(this.gameScreen.tileset.platformTiles, tile);
+    return arrayContains(this.tileset.platformTiles, tile);
   }
   isWall(pos) {
     const tile = this.getTile(pos);
     return (
-      !arrayContains(this.gameScreen.tileset.walkableTiles, tile) &&
-      !arrayContains(this.gameScreen.tileset.platformTiles, tile) &&
-      !arrayContains(this.gameScreen.tileset.spikeTiles, tile)
+      !arrayContains(this.tileset.walkableTiles, tile) &&
+      !arrayContains(this.tileset.platformTiles, tile) &&
+      !arrayContains(this.tileset.spikeTiles, tile)
     );
   }
   drawTile(pos, context) {
     const tileId = this.tiles[pos.y][pos.x];
-    if (tileId === undefined) {
-      return;
-    }
 
     if (!isNumber(tileId)) {
       throw new Error(`tileId should be a number, and it's ${tileId}`);
