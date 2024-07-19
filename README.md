@@ -2,7 +2,7 @@
 
 ## Plot
 
-Horrible shadow is hanging over Rummaroe. Monsters roam the land and no place is safe. You are the chosen one of the legends. Fight the monsters and uncover the source of darkness. Also get rich and popular.
+Horrible shadow is hanging over Rummaroe. Monsters and spikes roam the land and no place is safe. You have protagonist hair so i guess you gotta do something?
 
 ## Credits
 
