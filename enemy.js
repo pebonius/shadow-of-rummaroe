@@ -2,7 +2,7 @@ import CharacterAnimations from "./characterAnimations.js";
 import CharacterSounds from "./characterSounds.js";
 import Physics from "./physics.js";
 import Point from "./point.js";
-import { arrayContains } from "./utilities.js";
+import Debug from "./debug.js";
 
 export default class Enemy {
   constructor(gameScreen, data, map) {
@@ -111,7 +111,11 @@ export default class Enemy {
       case "frozen":
         break;
       default:
-        throw new Error(`enemy <${this.type}> put in unrecognized state`);
+        Debug.log(
+          `${this.map.toString()}: enemy <${
+            this.type
+          }> put in unrecognized state`
+        );
     }
   }
   draw(context) {
