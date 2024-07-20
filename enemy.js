@@ -122,10 +122,6 @@ export default class Enemy {
     }
   }
   applyType(data) {
-    if (this.gameScreen.content.data.enemyTypes.length === 0) {
-      throw Error("no enemy types defined in data.enemyTypes");
-    }
-
     const type = this.gameScreen.content.data.enemyTypes.find(
       (x) => x.name === data.type
     );
