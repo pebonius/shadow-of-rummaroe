@@ -4,7 +4,7 @@ export default class Tileset {
   constructor(gameScreen) {
     this.gameScreen = gameScreen;
     this.image = gameScreen.content.getAssetByName("tileset");
-    this.walkableTiles = [255, 191, 190, 189];
+    this.walkableTiles = [13, 15, 189, 190, 191, 197, 213, 255];
     this.spikeTiles = [219, 220, 235, 236];
     this.platformTiles = [108];
     this.tileSize = 16;
