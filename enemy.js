@@ -2,6 +2,7 @@ import CharacterAnimations from "./characterAnimations.js";
 import CharacterSounds from "./characterSounds.js";
 import Physics from "./physics.js";
 import Point from "./point.js";
+import { arrayContains } from "./utilities.js";
 
 export default class Enemy {
   constructor(gameScreen, data, map) {
@@ -120,28 +121,26 @@ export default class Enemy {
       this.physics.draw(context);
     }
   }
-  applyType(type) {
-    this.type = type;
-    switch (this.type) {
-      case "bug":
-        this.baseSprite = 4;
-        break;
-      case "slime":
-        this.baseSprite = 20;
-        break;
-      case "skeleton":
-        this.baseSprite = 36;
-        break;
-      case "ant":
-        this.baseSprite = 52;
-        break;
-      default:
-        this.baseSprite = 227;
-        break;
+  applyType(data) {
+    if (this.gameScreen.content.data.enemyTypes.length === 0) {
+      throw Error("no enemy types defined in data.enemyTypes");
     }
+
+    const type = this.gameScreen.content.data.enemyTypes.find(
+      (x) => x.name === data.type
+    );
+
+    if (type === undefined) {
+      this.type = "undefined";
+      this.baseSprite = 227;
+      return;
+    }
+
+    this.type = type.name;
+    this.baseSprite = type.baseSprite;
   }
   load(data) {
-    this.applyType(data.type);
+    this.applyType(data);
     this.position = new Point(data.positionX, data.positionY);
     this.walkLeft = data.walkLeft;
   }

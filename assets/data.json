@@ -14,6 +14,24 @@
     "damageSound": "damage",
     "jumpSound": "jump"
   },
+  "enemyTypes": [
+    {
+      "name": "bug",
+      "baseSprite": 4
+    },
+    {
+      "name": "slime",
+      "baseSprite": 20
+    },
+    {
+      "name": "skeleton",
+      "baseSprite": 36
+    },
+    {
+      "name": "ant",
+      "baseSprite": 52
+    }
+  ],
   "maps": [
     {
       "name": "map0",
