@@ -1,13 +1,10 @@
-import Point from "./point.js";
+import { cloneArray } from "./utilities.js";
 
 export default class Tileset {
   constructor(gameScreen) {
     this.gameScreen = gameScreen;
-    this.image = gameScreen.content.getAssetByName("tileset");
-    this.walkableTiles = [13, 15, 189, 190, 191, 197, 213, 255];
-    this.spikeTiles = [219, 220, 235, 236];
-    this.platformTiles = [108];
-    this.tileSize = 16;
+    const tilesetData = gameScreen.content.data.tileset;
+    this.load(tilesetData);
   }
   tilesetWidthInTiles = () => {
     return Math.ceil(this.image.width / this.tileSize);
@@ -19,4 +16,11 @@ export default class Tileset {
   tileToRow = (tile) => {
     return Math.floor(tile / this.tilesetWidthInTiles());
   };
+  load(tilesetData) {
+    this.image = this.gameScreen.content.getAssetByName(tilesetData.image);
+    this.tileSize = tilesetData.tileSize;
+    this.walkableTiles = cloneArray(tilesetData.walkableTiles);
+    this.spikeTiles = cloneArray(tilesetData.spikeTiles);
+    this.platformTiles = cloneArray(tilesetData.platformTiles);
+  }
 }

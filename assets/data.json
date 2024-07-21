@@ -2,6 +2,13 @@
   "game": {
     "title": "Shadow of Rummaroe"
   },
+  "tileset": {
+    "image": "tileset",
+    "tileSize": 16,
+    "walkableTiles": [13, 15, 189, 190, 191, 197, 213, 255],
+    "spikeTiles": [219, 220, 235, 236],
+    "platformTiles": [108]
+  },
   "player": {
     "name": "Idlet",
     "baseSprite": 16,
