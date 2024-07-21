@@ -17,41 +17,6 @@ export default class Item {
   set positionY(value) {
     this.position.y = Math.round(value);
   }
-  get itemTypes() {
-    return [
-      { name: "diamond", sprite: 27, sound: "puroring", price: 10 },
-      { name: "gem", sprite: 28, sound: "puroring", price: 5 },
-      { name: "coin", sprite: 30, sound: "ring", price: 1 },
-    ];
-  }
-  get itemType() {
-    const itemType = this.itemTypes.find((x) => {
-      return x.name === this.type;
-    });
-
-    return itemType;
-  }
-  get baseSprite() {
-    if (!isDefined(this.itemType)) {
-      return 229;
-    }
-
-    return this.itemType.sprite;
-  }
-  get sound() {
-    if (!isDefined(this.itemType)) {
-      return "damage";
-    }
-
-    return this.itemType.sound;
-  }
-  get price() {
-    if (!isDefined(this.itemType)) {
-      return 0;
-    }
-
-    return this.itemType.price;
-  }
   get soundSrc() {
     return this.gameScreen.content.getAssetByName(this.sound);
   }
@@ -79,8 +44,26 @@ export default class Item {
   draw(context) {
     this.animations.draw(context);
   }
+  applyType(data) {
+    const type = this.gameScreen.content.data.itemTypes.find(
+      (x) => x.name === data.type
+    );
+
+    if (type === undefined) {
+      this.type = "undefined";
+      this.baseSprite = 227;
+      this.sound = "damage";
+      this.price = 0;
+      return;
+    }
+
+    this.type = type.name;
+    this.baseSprite = type.sprite;
+    this.sound = type.sound;
+    this.price = type.price;
+  }
   load(data) {
     this.position = new Point(data.positionX, data.positionY);
-    this.type = data.type;
+    this.applyType(data);
   }
 }

@@ -39,6 +39,11 @@
       "baseSprite": 52
     }
   ],
+  "itemTypes": [
+    { "name": "diamond", "sprite": 27, "sound": "puroring", "price": 10 },
+    { "name": "gem", "sprite": 28, "sound": "puroring", "price": 5 },
+    { "name": "coin", "sprite": 30, "sound": "ring", "price": 1 }
+  ],
   "maps": [
     {
       "name": "map0",
