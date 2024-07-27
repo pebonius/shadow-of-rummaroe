@@ -93,7 +93,7 @@ export default class Physics {
   get objectiveVelocityX() {
     const pow = Math.pow(this.velocity.x, 2);
     const sqrt = Math.sqrt(pow);
-    const round = Math.round(sqrt);
+    const round = sqrt;
     return round;
   }
   get objectiveVelocityY() {

@@ -10,6 +10,7 @@ export default class Enemy {
     this.map = map;
     this.spriteSheet = gameScreen.tileset;
     this.physics = new Physics(this);
+    this.physics.walkSpeed = 0.8;
     this.sounds = new CharacterSounds(this);
     this.load(data);
     this.animations = new CharacterAnimations(this);
@@ -24,10 +25,10 @@ export default class Enemy {
     return this.spriteSheet.tileSize;
   }
   set positionX(value) {
-    this.position.x = Math.round(value);
+    this.position.x = value;
   }
   set positionY(value) {
-    this.position.y = Math.round(value);
+    this.position.y = value;
   }
   get center() {
     const half = this.spriteSheet.tileSize * 0.5;
@@ -133,11 +134,13 @@ export default class Enemy {
     if (type === undefined) {
       this.type = "undefined";
       this.baseSprite = 227;
+      this.physics.walkSpeed = 0.5;
       return;
     }
 
     this.type = type.name;
     this.baseSprite = type.baseSprite;
+    this.physics.walkSpeed = type.speed;
   }
   load(data) {
     this.applyType(data);
