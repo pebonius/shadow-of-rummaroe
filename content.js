@@ -63,7 +63,7 @@ export default class ContentManager {
     }, "./assets/data.json");
   }
   loadSounds() {
-    const sounds = ["damage", "step", "ring", "puroring", "jump"];
+    const sounds = ["damage", "jump", "puroring", "ring", "step", "write"];
 
     sounds.forEach((element) => {
       this.loadAudio((audio) => {

@@ -7,7 +7,7 @@ export default class SavePoint {
     this.gameScreen = gameScreen;
     this.map = map;
     this.baseSprite = 12;
-    this.sound = "puroring";
+    this.sound = "write";
     this.load(data);
     this.animations = new ItemAnimations(this);
   }
@@ -39,7 +39,7 @@ export default class SavePoint {
     const player = this.gameScreen.player;
     if (
       player.currentSavePoint === null ||
-      player.currentSavePoint.map !== this.map
+      player.currentSavePoint.map.name !== this.map.name
     ) {
       this.gameScreen.sound.playSoundEffect(this.soundSrc);
 
