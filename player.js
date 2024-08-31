@@ -16,7 +16,8 @@ export default class Player {
     this.animations = new CharacterAnimations(this);
     this.deathAnimationTimer = 0;
     this.deathAnimationDuration = 60;
-    this.state = "normal";
+    this.currentState = "normal";
+    this.currentSavePoint = null;
   }
   get width() {
     return this.spriteSheet.tileSize;
@@ -33,6 +34,18 @@ export default class Player {
   get center() {
     const half = this.spriteSheet.tileSize * 0.5;
     return new Point(this.position.x + half, this.position.y + half);
+  }
+  set state(value) {
+    this.currentState = value;
+    if (this.gameScreen.debugMode) {
+      Debug.log(`player state set to <<${value}>>`);
+    }
+  }
+  set savePoint(value) {
+    this.currentSavePoint = {
+      position: value.position,
+      map: value.map,
+    };
   }
   enterMap(map) {
     this.map = map;
@@ -51,7 +64,14 @@ export default class Player {
     }
   }
   onDeath() {
-    this.gameScreen.endGame();
+    if (this.currentSavePoint === null) {
+      this.gameScreen.endGame();
+    } else {
+      this.enterMap(this.currentSavePoint.map);
+      this.positionX = this.currentSavePoint.position.x;
+      this.positionY = this.currentSavePoint.position.y;
+      this.state = "normal";
+    }
   }
   enemyJump() {
     this.physics.bounce();
@@ -76,7 +96,7 @@ export default class Player {
     }
   }
   update(input) {
-    switch (this.state) {
+    switch (this.currentState) {
       case "normal":
         this.physics.update();
         this.collisions.update();

@@ -4,10 +4,12 @@ import Item from "./item.js";
 import {
   arrayContains,
   cloneArray,
+  isDefined,
   isNumber,
   removeDead,
 } from "./utilities.js";
 import Enemy from "./enemy.js";
+import SavePoint from "./savePoint.js";
 
 export default class Tilemap {
   constructor(gameScreen, data) {
@@ -78,7 +80,9 @@ export default class Tilemap {
   }
   isWalkable(pos) {
     const tile = this.getTile(pos);
-    return arrayContains(this.tileset.walkableTiles, tile) || this.isSpikes(pos);
+    return (
+      arrayContains(this.tileset.walkableTiles, tile) || this.isSpikes(pos)
+    );
   }
   isSpikes(pos) {
     const tile = this.getTile(pos);
@@ -125,6 +129,10 @@ export default class Tilemap {
     this.enemies.forEach((element) => {
       element.draw(context);
     });
+
+    this.savePoints.forEach((element) => {
+      element.draw(context);
+    });
   }
   draw(context) {
     for (let y = 0; y < this.height; y++)
@@ -143,6 +151,10 @@ export default class Tilemap {
     });
 
     this.enemies.forEach((element) => {
+      element.update(input);
+    });
+
+    this.savePoints.forEach((element) => {
       element.update(input);
     });
   }
@@ -165,6 +177,13 @@ export default class Tilemap {
       this.enemies.push(new Enemy(this.gameScreen, element, this));
     });
   }
+  loadSavePoints(data) {
+    if (isDefined(data.savePoints)) {
+      data.savePoints.forEach((element) => {
+        this.savePoints.push(new SavePoint(this.gameScreen, element, this));
+      });
+    }
+  }
   load(data) {
     this.name = data.name;
     this.music = data.music;
@@ -177,5 +196,7 @@ export default class Tilemap {
     this.loadItems(data);
     this.enemies = Array();
     this.loadEnemies(data);
+    this.savePoints = Array();
+    this.loadSavePoints(data);
   }
 }
