@@ -46,6 +46,12 @@ export default class Player {
       position: value.position,
       map: value.map,
     };
+
+    if (this.gameScreen.debugMode) {
+      Debug.log(
+        `player saved at map: <<${value.map}>>, position: <<${value.position.x}, ${value.position.y}>>`
+      );
+    }
   }
   enterMap(map) {
     this.map = map;

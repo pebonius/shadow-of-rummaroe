@@ -44,10 +44,6 @@ export default class SavePoint {
       this.gameScreen.sound.playSoundEffect(this.soundSrc);
 
       player.savePoint = { position: this.position, map: this.map };
-
-      if (this.gameScreen.debugMode) {
-        Debug.log(`player saved at ${this.position.x}, ${this.position.y}`);
-      }
     }
   }
   draw(context) {
