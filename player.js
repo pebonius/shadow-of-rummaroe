@@ -77,6 +77,7 @@ export default class Player {
       this.positionX = this.currentSavePoint.position.x;
       this.positionY = this.currentSavePoint.position.y;
       this.state = "normal";
+      this.deathAnimationTimer = 0;
     }
   }
   enemyJump() {
