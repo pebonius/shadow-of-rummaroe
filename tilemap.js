@@ -165,6 +165,9 @@ export default class Tilemap {
     return `${this.name}m${data.positionX}${data.positionY}${data.type}`;
   }
   loadItems(data) {
+    if (!isDefined(data.items)) {
+      return;
+    }
     data.items.forEach((element) => {
       const id = this.getItemId(element);
       if (!arrayContains(this.gameScreen.deadItemIds, id)) {
@@ -173,16 +176,20 @@ export default class Tilemap {
     });
   }
   loadEnemies(data) {
+    if (!isDefined(data.enemies)) {
+      return;
+    }
     data.enemies.forEach((element) => {
       this.enemies.push(new Enemy(this.gameScreen, element, this));
     });
   }
   loadSavePoints(data) {
-    if (isDefined(data.savePoints)) {
-      data.savePoints.forEach((element) => {
-        this.savePoints.push(new SavePoint(this.gameScreen, element, this));
-      });
+    if (!isDefined(data.savePoints)) {
+      return;
     }
+    data.savePoints.forEach((element) => {
+      this.savePoints.push(new SavePoint(this.gameScreen, element, this));
+    });
   }
   load(data) {
     this.name = data.name;
