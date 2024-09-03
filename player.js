@@ -37,9 +37,7 @@ export default class Player {
   }
   set state(value) {
     this.currentState = value;
-    if (this.gameScreen.debugMode) {
-      Debug.log(`player state set to <<${value}>>`);
-    }
+    this.gameScreen.debug.logInDebugMode(`player state set to <<${value}>>`);
   }
   set savePoint(value) {
     this.currentSavePoint = {
@@ -47,15 +45,15 @@ export default class Player {
       map: value.map,
     };
 
-    if (this.gameScreen.debugMode) {
-      Debug.log(
-        `player saved at map: <<${value.map}>>, position: <<${value.position.x}, ${value.position.y}>>`
-      );
-    }
+    this.gameScreen.debug.logInDebugMode(
+      `player saved at map: <<${value.map}>>, position: <<${value.position.x}, ${value.position.y}>>`
+    );
   }
   enterMap(map) {
     this.map = map;
     map.onEnter(this);
+
+    this.gameScreen.debug.logInDebugMode(`player entered map: <<${map}>>`);
   }
   onHurt() {
     this.state = "dying";
@@ -78,6 +76,7 @@ export default class Player {
       this.positionY = this.currentSavePoint.position.y;
       this.state = "normal";
       this.deathAnimationTimer = 0;
+      this.gameScreen.debug.logInDebugMode(`player revived at save point`);
     }
   }
   enemyJump() {
@@ -115,7 +114,9 @@ export default class Player {
         this.animations.update();
         break;
       default:
-        throw new Error("player put in unrecognized state");
+        throw new Error(
+          `player was in unrecognized state ${this.currentState}`
+        );
     }
   }
   draw(context) {

@@ -15,10 +15,25 @@ export default class Debug {
     try {
       console.log(obj.toString());
     } catch (error) {
-      console.log("trying to Debug.log an object caused the following error:");
+      console.log("trying to Debug log an object caused the following error:");
       console.log(error);
     }
   }
+
+  logInDebugMode(obj) {
+    if (!this.gameScreen.debugMode) {
+      return;
+    }
+    try {
+      console.log(obj.toString());
+    } catch (error) {
+      console.log(
+        "trying to logInDebugMode an object caused the following error:"
+      );
+      console.log(error);
+    }
+  }
+
   draw(context, canvas) {
     this.drawPlayerPosition(context);
     this.drawPlayerVelocity(context);

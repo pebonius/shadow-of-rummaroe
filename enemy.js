@@ -112,7 +112,7 @@ export default class Enemy {
       case "frozen":
         break;
       default:
-        Debug.log(
+        this.gameScreen.debug.logInDebugMode(
           `${this.map.toString()}: enemy <${
             this.type
           }> put in unrecognized state`
