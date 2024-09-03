@@ -1,5 +1,5 @@
 import GameState from "./gameState.js";
-import GameScreen from "./actionScreen.js";
+import GameScreen from "./gameScreen.js";
 import { drawText } from "./graphics.js";
 
 export default class LoadingScreen extends GameState {
