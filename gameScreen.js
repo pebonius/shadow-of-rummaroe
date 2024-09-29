@@ -35,11 +35,11 @@ export default class GameScreen extends GameState {
     }
   }
   load() {
+    this.deadItemIds = new Array();
     this.tileset = new Tileset(this);
     this.maps = new Maps(this, this.content.data);
     this.player = new Player(this, this.content.data);
     this.gold = 0;
-    this.deadItemIds = new Array();
     this.hud = new Hud(this);
   }
   endGame() {
