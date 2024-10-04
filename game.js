@@ -17,6 +17,8 @@ export default class Game {
     this.input = new InputManager(canvas);
     this.gameStates = new Array();
     this.isRunning = false;
+    this.lastUpdateTime = null;
+    this.updateRate = 15;
   }
   initialize() {
     this.input.addEvents();
@@ -40,12 +42,18 @@ export default class Game {
     requestAnimationFrame(() => self.gameLoop(self));
   }
   update() {
+    if (Date.now() < this.lastUpdateTime + this.updateRate) {
+      return;
+    }
+
     this.input.update();
     removeDead(this.gameStates);
     if (this.gameStates.length <= 0) {
       throw new Error("no game state to process");
     }
     lastElementInArray(this.gameStates).update(this.input);
+
+    this.lastUpdateTime = Date.now();
   }
   draw() {
     clearContext(this.context, this.canvas);
