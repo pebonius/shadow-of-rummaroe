@@ -6,18 +6,24 @@ export default class Physics {
   constructor(parentObject) {
     this.parentObject = parentObject;
     this.velocity = new Point(0, 0);
-    this.baseRadius = 2;
     this.damping = 0.9;
     this.walkSpeed = 1;
     this.isDropping = false;
+    this.boundingRectMargin = 2;
     this.boundingRect = new Rectangle(
-      new Point(0, 0),
+      this.boundingRectPos,
       new Point(
-        this.parentObject.spriteSheet.tileSize,
-        this.parentObject.spriteSheet.tileSize
+        this.parentObject.width - this.boundingRectMargin * 2,
+        this.parentObject.height
       )
     );
     console.log(this.boundingRect);
+  }
+  get boundingRectPos() {
+    return new Point(
+      this.parentObject.position.x + this.boundingRectMargin,
+      this.parentObject.position.y
+    );
   }
   get tileAbove() {
     return this.parentObject.map.transformPos(
@@ -49,38 +55,6 @@ export default class Physics {
       new Point(this.boundingRect.right, this.boundingRect.bottom)
     );
   }
-  get baseLeftPos() {
-    return this.parentObject.map.transformPos(
-      new Point(
-        this.boundingRect.center.x - this.baseRadius,
-        this.boundingRect.bottom
-      )
-    );
-  }
-  get baseRightPos() {
-    return this.parentObject.map.transformPos(
-      new Point(
-        this.boundingRect.center.x + this.baseRadius,
-        this.boundingRect.bottom
-      )
-    );
-  }
-  get headLeftPos() {
-    return this.parentObject.map.transformPos(
-      new Point(
-        this.boundingRect.center.x - this.baseRadius,
-        this.boundingRect.top
-      )
-    );
-  }
-  get headRightPos() {
-    return this.parentObject.map.transformPos(
-      new Point(
-        this.boundingRect.center.x + this.baseRadius,
-        this.boundingRect.top
-      )
-    );
-  }
   get objectiveVelocityX() {
     const pow = Math.pow(this.velocity.x, 2);
     const sqrt = Math.sqrt(pow);
@@ -105,7 +79,7 @@ export default class Physics {
     this.velocity.y = value;
   }
   updateBoundingRect() {
-    this.boundingRect.position = this.parentObject.position;
+    this.boundingRect.position = this.boundingRectPos;
   }
   update() {
     this.updateBoundingRect();
@@ -114,14 +88,6 @@ export default class Physics {
     this.fall();
   }
   draw(context) {
-    // draw base
-    const basePos = new Point(
-      this.boundingRect.center.x - this.baseRadius,
-      this.boundingRect.bottom
-    );
-    const baseSize = new Point(this.baseRadius * 2 + 1, 1);
-    drawRectangle(context, basePos, baseSize, "cyan");
-
     // draw bounding rectangle
     drawRectangle(
       context,
@@ -139,8 +105,10 @@ export default class Physics {
       (this.velocity.x < 0 && map.isWall(this.tileLeft)) ||
       (this.isDropping &&
         this.velocity.x > 0 &&
-        map.isWall(this.baseRightPos)) ||
-      (this.isDropping && this.velocity.x < 0 && map.isWall(this.baseLeftPos))
+        map.isWall(this.tileBelowRight)) ||
+      (this.isDropping &&
+        this.velocity.x < 0 &&
+        map.isWall(this.tileBelowRight))
     ) {
       this.velocityX = 0;
     } else {
@@ -151,9 +119,16 @@ export default class Physics {
     if (
       this.velocity.y < 0 &&
       (map.isWall(this.tileAbove) ||
-        map.isWall(this.headLeftPos) ||
-        map.isWall(this.headRightPos)) &&
-      !map.isPlatform(this.tileAbove)
+        map.isWall(
+          map.transformPos(
+            new Point(this.boundingRect.left + 1, this.boundingRect.top)
+          )
+        ) ||
+        map.isWall(
+          map.transformPos(
+            new Point(this.boundingRect.right - 1, this.boundingRect.top)
+          )
+        ))
     ) {
       this.velocityY = 0;
     } else {
@@ -180,7 +155,7 @@ export default class Physics {
     if (this.isDropping) {
       this.checkDrop();
     }
-    if (this.isStandingOnGround() && !this.isDropping) {
+    if (this.velocityY > 0 && this.isStandingOnGround() && !this.isDropping) {
       this.velocity.y = 0;
       this.parentObject.positionY = this.parentObject.map.getTopOfTile(
         new Point(this.tileBelow.x, this.tileBelow.y - 1)
@@ -197,10 +172,19 @@ export default class Physics {
     }
   }
   isStandingOnGround() {
+    const map = this.parentObject.map;
     return (
-      this.parentObject.map.isWall(this.tileBelow) ||
-      this.parentObject.map.isWall(this.baseLeftPos) ||
-      this.parentObject.map.isWall(this.baseRightPos) ||
+      map.isWall(this.tileBelow) ||
+      map.isWall(
+        map.transformPos(
+          new Point(this.boundingRect.left + 1, this.boundingRect.bottom)
+        )
+      ) ||
+      map.isWall(
+        map.transformPos(
+          new Point(this.boundingRect.right - 1, this.boundingRect.bottom)
+        )
+      ) ||
       this.isOnPlatform()
     );
   }
@@ -245,7 +229,23 @@ export default class Physics {
     this.velocityY -= this.parentObject.jump * 1.5;
   }
   drop() {
-    if (this.parentObject.map.isPlatform(this.tileBelow)) {
+    const map = this.parentObject.map;
+
+    if (
+      this.parentObject.map.isPlatform(this.tileBelow) &&
+      !(
+        map.isWall(
+          map.transformPos(
+            new Point(this.boundingRect.left + 1, this.boundingRect.bottom)
+          )
+        ) ||
+        map.isWall(
+          map.transformPos(
+            new Point(this.boundingRect.right - 1, this.boundingRect.bottom)
+          )
+        )
+      )
+    ) {
       this.velocityY = 0;
       this.isDropping = true;
       this.startDropPosY = this.boundingRect.bottom;

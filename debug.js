@@ -117,13 +117,13 @@ export default class Debug {
   }
 
   drawTileBelow(context) {
-    const tileBelow = this.gameScreen.player.map.getTile(
-      this.gameScreen.player.physics.tileBelow
-    );
+    const tileBelow = this.gameScreen.player.physics.isStandingOnGround()
+      ? "true"
+      : "false";
 
     drawText(
       context,
-      `tileBelow: ${tileBelow}`,
+      `isOnGround: ${tileBelow}`,
       this.overlayFontSize,
       "white",
       this.secondRowX,
