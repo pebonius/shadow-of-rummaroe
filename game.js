@@ -17,8 +17,6 @@ export default class Game {
     this.input = new InputManager(canvas);
     this.gameStates = new Array();
     this.isRunning = false;
-    this.lastUpdateTime = null;
-    this.updateRate = 15;
   }
   initialize() {
     this.input.addEvents();
@@ -34,33 +32,43 @@ export default class Game {
     );
     this.isRunning = true;
     var self = this;
+
+    // for FPS counter
     this.lastLoop = Date.now();
     this.fps = 0;
     this.fpsTimer = 0;
     this.fpsDelay = 10;
     this.fpsString = "";
+
+    // for update rate throttle
+    this.lastUpdateTime = Date.now();
+    this.updateRate = 15;
+
     requestAnimationFrame(() => self.gameLoop(self));
   }
   update() {
+    // throttle update rate
     if (Date.now() < this.lastUpdateTime + this.updateRate) {
       return;
     }
 
-    this.input.update();
-    removeDead(this.gameStates);
     if (this.gameStates.length <= 0) {
       throw new Error("no game state to process");
     }
+
+    this.input.update();
+    removeDead(this.gameStates);
     lastElementInArray(this.gameStates).update(this.input);
 
+    // save current time for update rate throttle
     this.lastUpdateTime = Date.now();
   }
   draw() {
     clearContext(this.context, this.canvas);
     lastElementInArray(this.gameStates).draw(this.context, this.canvas);
-    this.drawFps();
+    this.drawFpsCounter();
   }
-  drawFps() {
+  drawFpsCounter() {
     drawText(this.context, Math.round(this.fpsString), 10, "lime", 140, 5);
   }
   gameLoop(self) {
