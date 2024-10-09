@@ -1,5 +1,6 @@
 import { drawRectangle } from "./graphics.js";
 import Point from "./point.js";
+import Rectangle from "./rectangle.js";
 
 export default class Physics {
   constructor(parentObject) {
@@ -9,6 +10,10 @@ export default class Physics {
     this.damping = 0.9;
     this.walkSpeed = 1;
     this.isDropping = false;
+    this.boundingRect = new Rectangle(
+      new Point(0, 0),
+      new Point(this.parentObject.width, this.parentObject.height)
+    );
   }
   get bottomTouchPoint() {
     return new Point(
@@ -113,21 +118,37 @@ export default class Physics {
   set velocityY(value) {
     this.velocity.y = value;
   }
+  updateBoundingRect() {
+    this.boundingRect.position = this.parentObject.position;
+  }
   update() {
+    this.updateBoundingRect();
     this.updatePosByVelocity();
     this.applyDamping();
     this.fall();
   }
   draw(context) {
+    // draw base
     const basePos = new Point(
       this.bottomTouchPoint.x - this.baseRadius,
       this.bottomTouchPoint.y
     );
     const baseSize = new Point(this.baseRadius * 2 + 1, 1);
     drawRectangle(context, basePos, baseSize, "cyan");
+
+    // draw touch points
     this.touchPoints.forEach((element) => {
       drawRectangle(context, element, new Point(1, 1), "magenta");
     });
+
+    // draw bounding rectangle
+    drawRectangle(
+      context,
+      this.boundingRect.position,
+      this.boundingRect.size,
+      "magenta",
+      false
+    );
   }
   updatePosByVelocity() {
     const map = this.parentObject.map;
