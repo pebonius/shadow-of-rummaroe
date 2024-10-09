@@ -12,87 +12,73 @@ export default class Physics {
     this.isDropping = false;
     this.boundingRect = new Rectangle(
       new Point(0, 0),
-      new Point(this.parentObject.width, this.parentObject.height)
+      new Point(
+        this.parentObject.spriteSheet.tileSize,
+        this.parentObject.spriteSheet.tileSize
+      )
     );
-  }
-  get bottomTouchPoint() {
-    return new Point(
-      this.parentObject.position.x + this.parentObject.width * 0.5,
-      this.parentObject.position.y + this.parentObject.height
-    );
-  }
-  get leftTouchPoint() {
-    return new Point(
-      this.parentObject.position.x,
-      this.parentObject.position.y + this.parentObject.height * 0.5
-    );
-  }
-  get rightTouchPoint() {
-    return new Point(
-      this.parentObject.position.x + this.parentObject.width,
-      this.parentObject.position.y + this.parentObject.height * 0.5
-    );
-  }
-  get topTouchPoint() {
-    return new Point(
-      this.parentObject.position.x + this.parentObject.width * 0.5,
-      this.parentObject.position.y
-    );
-  }
-  get touchPoints() {
-    return [
-      this.topTouchPoint,
-      this.bottomTouchPoint,
-      this.leftTouchPoint,
-      this.rightTouchPoint,
-    ];
+    console.log(this.boundingRect);
   }
   get tileAbove() {
-    return this.parentObject.map.transformPos(this.topTouchPoint);
+    return this.parentObject.map.transformPos(
+      new Point(this.boundingRect.center.x, this.boundingRect.top)
+    );
   }
   get tileBelow() {
-    return this.parentObject.map.transformPos(this.bottomTouchPoint);
+    return this.parentObject.map.transformPos(
+      new Point(this.boundingRect.center.x, this.boundingRect.bottom)
+    );
   }
   get tileLeft() {
-    return this.parentObject.map.transformPos(this.leftTouchPoint);
+    return this.parentObject.map.transformPos(
+      new Point(this.boundingRect.left, this.boundingRect.center.y)
+    );
   }
   get tileRight() {
-    return this.parentObject.map.transformPos(this.rightTouchPoint);
+    return this.parentObject.map.transformPos(
+      new Point(this.boundingRect.right, this.boundingRect.center.y)
+    );
   }
   get tileBelowLeft() {
     return this.parentObject.map.transformPos(
-      new Point(this.leftTouchPoint.x, this.bottomTouchPoint.y)
+      new Point(this.boundingRect.left, this.boundingRect.bottom)
     );
   }
   get tileBelowRight() {
     return this.parentObject.map.transformPos(
-      new Point(this.rightTouchPoint.x, this.bottomTouchPoint.y)
+      new Point(this.boundingRect.right, this.boundingRect.bottom)
     );
   }
   get baseLeftPos() {
     return this.parentObject.map.transformPos(
       new Point(
-        this.bottomTouchPoint.x - this.baseRadius,
-        this.bottomTouchPoint.y
+        this.boundingRect.center.x - this.baseRadius,
+        this.boundingRect.bottom
       )
     );
   }
   get baseRightPos() {
     return this.parentObject.map.transformPos(
       new Point(
-        this.bottomTouchPoint.x + this.baseRadius,
-        this.bottomTouchPoint.y
+        this.boundingRect.center.x + this.baseRadius,
+        this.boundingRect.bottom
       )
     );
   }
   get headLeftPos() {
     return this.parentObject.map.transformPos(
-      new Point(this.topTouchPoint.x - this.baseRadius, this.topTouchPoint.y)
+      new Point(
+        this.boundingRect.center.x - this.baseRadius,
+        this.boundingRect.top
+      )
     );
   }
   get headRightPos() {
     return this.parentObject.map.transformPos(
-      new Point(this.topTouchPoint.x + this.baseRadius, this.topTouchPoint.y)
+      new Point(
+        this.boundingRect.center.x + this.baseRadius,
+        this.boundingRect.top
+      )
     );
   }
   get objectiveVelocityX() {
@@ -130,16 +116,11 @@ export default class Physics {
   draw(context) {
     // draw base
     const basePos = new Point(
-      this.bottomTouchPoint.x - this.baseRadius,
-      this.bottomTouchPoint.y
+      this.boundingRect.center.x - this.baseRadius,
+      this.boundingRect.bottom
     );
     const baseSize = new Point(this.baseRadius * 2 + 1, 1);
     drawRectangle(context, basePos, baseSize, "cyan");
-
-    // draw touch points
-    this.touchPoints.forEach((element) => {
-      drawRectangle(context, element, new Point(1, 1), "magenta");
-    });
 
     // draw bounding rectangle
     drawRectangle(
@@ -208,9 +189,9 @@ export default class Physics {
   }
   checkDrop() {
     if (
-      this.bottomTouchPoint.y >
+      this.boundingRect.bottom >
         this.startDropPosY + this.parentObject.map.tileSize ||
-      this.bottomTouchPoint.y < this.startDropPosY
+      this.boundingRect.bottom < this.startDropPosY
     ) {
       this.isDropping = false;
     }
@@ -227,8 +208,8 @@ export default class Physics {
     const topOfTileBelow = this.parentObject.map.getTopOfTile(this.tileBelow).y;
     return (
       this.parentObject.map.isPlatform(this.tileBelow) &&
-      this.bottomTouchPoint.y - topOfTileBelow < 2 &&
-      this.bottomTouchPoint.y - topOfTileBelow > -2
+      this.boundingRect.bottom - topOfTileBelow < 2 &&
+      this.boundingRect.bottom - topOfTileBelow > -2
     );
   }
   moveLeft() {
@@ -267,7 +248,7 @@ export default class Physics {
     if (this.parentObject.map.isPlatform(this.tileBelow)) {
       this.velocityY = 0;
       this.isDropping = true;
-      this.startDropPosY = this.bottomTouchPoint.y;
+      this.startDropPosY = this.boundingRect.bottom;
     }
   }
 }

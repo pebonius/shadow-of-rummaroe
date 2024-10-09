@@ -11,16 +11,10 @@ export default class PlayerCollisions {
   get map() {
     return this.player.map;
   }
-  get bottomTouchPoint() {
-    return this.player.physics.bottomTouchPoint;
-  }
-  get rightTouchPoint() {
-    return this.player.physics.rightTouchPoint;
-  }
   get spikeTouchPoint() {
     return new Point(
-      this.bottomTouchPoint.x,
-      this.bottomTouchPoint.y - this.map.tileSize * 0.5
+      this.player.physics.boundingRect.center.x,
+      this.player.physics.boundingRect.bottom - this.map.tileSize * 0.5
     );
   }
   checkForSpikes() {
@@ -41,7 +35,10 @@ export default class PlayerCollisions {
       this.player.positionY = mapHeight - this.map.tileSize - 1;
       return;
     }
-    if (this.bottomTouchPoint.y >= mapHeight && this.map.mapBelow !== null) {
+    if (
+      this.player.physics.boundingRect.bottom >= mapHeight &&
+      this.map.mapBelow !== null
+    ) {
       this.player.enterMap(
         this.player.gameScreen.maps.getMapById(this.map.mapBelow)
       );
@@ -55,7 +52,10 @@ export default class PlayerCollisions {
       this.player.positionX = mapWidth - this.map.tileSize - 1;
       return;
     }
-    if (this.rightTouchPoint.x >= mapWidth && this.map.mapRight !== null) {
+    if (
+      this.player.physics.boundingRect.right >= mapWidth &&
+      this.map.mapRight !== null
+    ) {
       this.player.enterMap(
         this.player.gameScreen.maps.getMapById(this.map.mapRight)
       );
