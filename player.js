@@ -9,10 +9,10 @@ export default class Player {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
     this.spriteSheet = gameScreen.tileset;
+    this.load(data);
     this.physics = new Physics(this);
     this.collisions = new PlayerCollisions(this);
     this.sounds = new CharacterSounds(this);
-    this.load(data);
     this.animations = new CharacterAnimations(this);
     this.deathAnimationTimer = 0;
     this.deathAnimationDuration = 60;

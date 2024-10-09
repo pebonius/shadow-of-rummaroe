@@ -9,10 +9,10 @@ export default class Enemy {
     this.gameScreen = gameScreen;
     this.map = map;
     this.spriteSheet = gameScreen.tileset;
-    this.physics = new Physics(this);
-    this.physics.walkSpeed = 0.8;
-    this.sounds = new CharacterSounds(this);
     this.load(data);
+    this.physics = new Physics(this);
+    this.physics.walkSpeed = this.walkSpeed;
+    this.sounds = new CharacterSounds(this);
     this.animations = new CharacterAnimations(this);
     this.stunTimer = 0;
     this.stunCooldown = 96;
@@ -140,7 +140,7 @@ export default class Enemy {
 
     this.type = type.name;
     this.baseSprite = type.baseSprite;
-    this.physics.walkSpeed = type.speed;
+    this.walkSpeed = type.speed;
   }
   load(data) {
     this.applyType(data);

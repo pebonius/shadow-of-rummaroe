@@ -20,11 +20,15 @@ export const setContextFont = (context, size) => {
   context.font = size + "px " + defaultFont;
 };
 
-export const drawRectangle = (context, position, size, color) => {
+export const drawRectangle = (context, position, size, color, fill = true) => {
   context.beginPath();
-  context.fillStyle = color;
-  context.fillRect(position.x, position.y, size.x, size.y);
-  context.fill();
+  if (fill) {
+    context.fillStyle = color;
+    context.fillRect(position.x, position.y, size.x, size.y);
+  } else {
+    context.strokeStyle = color;
+    context.strokeRect(position.x, position.y, size.x, size.y);
+  }
 };
 
 export const clearContext = (context, canvas) => {
