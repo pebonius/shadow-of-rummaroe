@@ -30,6 +30,7 @@ export default class CharacterAnimations {
         },
       ],
     };
+
     this.walkLeftCycle = {
       timer: 0,
       frameDuration: 8,
@@ -45,6 +46,7 @@ export default class CharacterAnimations {
         },
       ],
     };
+
     this.walkRightCycle = {
       timer: 0,
       frameDuration: 8,
@@ -60,6 +62,7 @@ export default class CharacterAnimations {
         },
       ],
     };
+
     this.stunnedCycle = {
       timer: 0,
       frameDuration: 8,
