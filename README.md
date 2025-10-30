@@ -1,6 +1,6 @@
 # Shadow of Rummaroe
 
-## Plot
+## The Plot
 
 Horrible shadow is hanging over Rummaroe. Monsters and spikes roam the land and no place is safe. You have protagonist hair so i guess you gotta do something?
 
