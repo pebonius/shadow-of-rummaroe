@@ -59,10 +59,10 @@ export default class Tilemap {
     return this.getTile(transformedPosition);
   }
   isWalkableByDisplayPosition(pos) {
-    const transformedPosition = this.transformPos(pos);
+    const transformedPosition = this.transformViewportPositionToMapTilePosition(pos);
     return this.isWalkable(transformedPosition);
   }
-  transformPos(pos) {
+  transformViewportPositionToMapTilePosition(pos) {
     const transformedPosition = new Point(
       Math.floor(pos.x / this.tileSize),
       Math.floor(pos.y / this.tileSize)

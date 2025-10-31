@@ -18,7 +18,7 @@ export default class PlayerCollisions {
     );
   }
   checkForSpikes() {
-    const tilePos = this.map.transformPos(this.spikeTouchPoint);
+    const tilePos = this.map.transformViewportPositionToMapTilePosition(this.spikeTouchPoint);
 
     if (this.map.isSpikes(tilePos)) {
       this.player.onHurt();

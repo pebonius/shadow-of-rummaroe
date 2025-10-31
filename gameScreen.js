@@ -13,7 +13,7 @@ export default class GameScreen extends GameState {
     this.content = content;
     this.sound = sound;
     this.debug = new Debug(this);
-    this.debugMode = false;
+    this.debugMode = true;
     this.load();
   }
   update(input) {

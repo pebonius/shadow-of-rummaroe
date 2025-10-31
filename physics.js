@@ -26,32 +26,32 @@ export default class Physics {
     );
   }
   get tileAbove() {
-    return this.parentObject.map.transformPos(
+    return this.parentObject.map.transformViewportPositionToMapTilePosition(
       new Point(this.boundingRect.center.x, this.boundingRect.top)
     );
   }
   get tileBelow() {
-    return this.parentObject.map.transformPos(
+    return this.parentObject.map.transformViewportPositionToMapTilePosition(
       new Point(this.boundingRect.center.x, this.boundingRect.bottom)
     );
   }
   get tileLeft() {
-    return this.parentObject.map.transformPos(
+    return this.parentObject.map.transformViewportPositionToMapTilePosition(
       new Point(this.boundingRect.left, this.boundingRect.center.y)
     );
   }
   get tileRight() {
-    return this.parentObject.map.transformPos(
+    return this.parentObject.map.transformViewportPositionToMapTilePosition(
       new Point(this.boundingRect.right, this.boundingRect.center.y)
     );
   }
   get tileBelowLeft() {
-    return this.parentObject.map.transformPos(
+    return this.parentObject.map.transformViewportPositionToMapTilePosition(
       new Point(this.boundingRect.left, this.boundingRect.bottom)
     );
   }
   get tileBelowRight() {
-    return this.parentObject.map.transformPos(
+    return this.parentObject.map.transformViewportPositionToMapTilePosition(
       new Point(this.boundingRect.right, this.boundingRect.bottom)
     );
   }
@@ -120,12 +120,12 @@ export default class Physics {
       this.velocity.y < 0 &&
       (map.isWall(this.tileAbove) ||
         map.isWall(
-          map.transformPos(
+          map.transformViewportPositionToMapTilePosition(
             new Point(this.boundingRect.left + 1, this.boundingRect.top)
           )
         ) ||
         map.isWall(
-          map.transformPos(
+          map.transformViewportPositionToMapTilePosition(
             new Point(this.boundingRect.right - 1, this.boundingRect.top)
           )
         ))
@@ -157,34 +157,36 @@ export default class Physics {
     }
     if (this.velocityY > 0 && this.isStandingOnGround() && !this.isDropping) {
       this.velocity.y = 0;
-      this.parentObject.positionY = this.parentObject.map.getTopOfTile(
-        new Point(this.tileBelow.x, this.tileBelow.y - 1)
-      ).y;
+      this.fixPositionToTopOfTileBelow();
     } else this.applyGravity();
   }
+  fixPositionToTopOfTileBelow() {
+    this.parentObject.positionY = this.parentObject.map.getTopOfTile(
+      new Point(this.tileBelow.x, this.tileBelow.y - 1)
+    ).y;
+  }
   checkDrop() {
-    if (
-      this.boundingRect.bottom >
-        this.startDropPosY + this.parentObject.map.tileSize ||
-      this.boundingRect.bottom < this.startDropPosY
-    ) {
+    if (this.droppedDownFullTile() || this.wentAboveStartingPositionOfDrop()) {
       this.isDropping = false;
     }
   }
+  wentAboveStartingPositionOfDrop() {
+    return this.boundingRect.bottom < this.startDropPosY;
+  }
+  droppedDownFullTile() {
+    return (
+      this.boundingRect.bottom >
+      this.startDropPosY + this.parentObject.map.tileSize
+    );
+  }
   isStandingOnGround() {
     const map = this.parentObject.map;
+
     return (
       map.isWall(this.tileBelow) ||
-      map.isWall(
-        map.transformPos(
-          new Point(this.boundingRect.left + 1, this.boundingRect.bottom)
-        )
-      ) ||
-      map.isWall(
-        map.transformPos(
-          new Point(this.boundingRect.right - 1, this.boundingRect.bottom)
-        )
-      ) ||
+      (this.bottomSideOfBoundingRectTouchesWall(map) &&
+        this.boundingRect.bottom <=
+          this.parentObject.map.getTopOfTile(this.tileBelow).y) ||
       this.isOnPlatform()
     );
   }
@@ -232,23 +234,31 @@ export default class Physics {
     const map = this.parentObject.map;
 
     if (
-      this.parentObject.map.isPlatform(this.tileBelow) &&
-      !(
-        map.isWall(
-          map.transformPos(
-            new Point(this.boundingRect.left + 1, this.boundingRect.bottom)
-          )
-        ) ||
-        map.isWall(
-          map.transformPos(
-            new Point(this.boundingRect.right - 1, this.boundingRect.bottom)
-          )
-        )
-      )
+      this.tileBelowIsPlatform() &&
+      !this.bottomSideOfBoundingRectTouchesWall(map)
     ) {
       this.velocityY = 0;
       this.isDropping = true;
       this.startDropPosY = this.boundingRect.bottom;
     }
+  }
+
+  bottomSideOfBoundingRectTouchesWall(map) {
+    return (
+      map.isWall(
+        map.transformViewportPositionToMapTilePosition(
+          new Point(this.boundingRect.left + 1, this.boundingRect.bottom)
+        )
+      ) ||
+      map.isWall(
+        map.transformViewportPositionToMapTilePosition(
+          new Point(this.boundingRect.right - 1, this.boundingRect.bottom)
+        )
+      )
+    );
+  }
+
+  tileBelowIsPlatform() {
+    return this.parentObject.map.isPlatform(this.tileBelow);
   }
 }
