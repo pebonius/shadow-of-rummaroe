@@ -19,7 +19,6 @@ export default class Physics {
       )
     );
     this.topBoundingRectLenience = 3;
-    console.log(this.boundingRect);
   }
   get boundingRectPos() {
     return new Point(
