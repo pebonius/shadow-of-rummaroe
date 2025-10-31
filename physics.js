@@ -6,22 +6,24 @@ export default class Physics {
   constructor(parentObject) {
     this.parentObject = parentObject;
     this.velocity = new Point(0, 0);
-    this.damping = 0.9;
+    this.dampingY = 0.9;
+    this.dampingX = 0.45;
     this.walkSpeed = 1;
     this.isDropping = false;
-    this.boundingRectMargin = 2;
+    this.boundingRectXShrink = 2;
     this.boundingRect = new Rectangle(
       this.boundingRectPos,
       new Point(
-        this.parentObject.width - this.boundingRectMargin * 2,
+        this.parentObject.width - this.boundingRectXShrink * 2,
         this.parentObject.height
       )
     );
+    this.topBoundingRectLenience = 3;
     console.log(this.boundingRect);
   }
   get boundingRectPos() {
     return new Point(
-      this.parentObject.position.x + this.boundingRectMargin,
+      this.parentObject.position.x + this.boundingRectXShrink,
       this.parentObject.position.y
     );
   }
@@ -78,67 +80,135 @@ export default class Physics {
   set velocityY(value) {
     this.velocity.y = value;
   }
-  updateBoundingRect() {
-    this.boundingRect.position = this.boundingRectPos;
-  }
   update() {
     this.updateBoundingRect();
+    this.floorVelocity();
     this.updatePosByVelocity();
     this.applyDamping();
     this.fall();
   }
-  draw(context) {
-    // draw bounding rectangle
-    drawRectangle(
-      context,
-      this.boundingRect.position,
-      this.boundingRect.size,
-      "magenta",
-      false
-    );
+  updateBoundingRect() {
+    this.boundingRect.position = this.boundingRectPos;
   }
   updatePosByVelocity() {
     const map = this.parentObject.map;
 
-    if (
-      (this.velocity.x > 0 && map.isWall(this.tileRight)) ||
-      (this.velocity.x < 0 && map.isWall(this.tileLeft)) ||
-      (this.isDropping &&
-        this.velocity.x > 0 &&
-        map.isWall(this.tileBelowRight)) ||
-      (this.isDropping &&
-        this.velocity.x < 0 &&
-        map.isWall(this.tileBelowRight))
-    ) {
-      this.velocityX = 0;
-    } else {
-      this.parentObject.positionX =
-        this.velocity.x + this.parentObject.position.x;
+    this.parentObject.positionX =
+      this.parentObject.position.x + this.xPositionDelta(map);
+    this.parentObject.positionY =
+      this.parentObject.position.y + this.yPositionDelta(map);
+  }
+  xPositionDelta(map) {
+    if (this.velocity.x < 0 && this.leftSideOfBoundingRectTouchesWall(map)) {
+      this.velocity.x = 0;
+      return 0;
+    }
+
+    if (this.velocity.x > 0 && this.rightSideOfBoundingRectTouchesWall(map)) {
+      this.velocity.x = 0;
+      return 0;
     }
 
     if (
-      this.velocity.y < 0 &&
-      (map.isWall(this.tileAbove) ||
-        map.isWall(
-          map.transformViewportPositionToMapTilePosition(
-            new Point(this.boundingRect.left + 1, this.boundingRect.top)
-          )
-        ) ||
-        map.isWall(
-          map.transformViewportPositionToMapTilePosition(
-            new Point(this.boundingRect.right - 1, this.boundingRect.top)
-          )
-        ))
+      this.isDropping &&
+      this.velocity.x < 0 &&
+      map.isWall(this.tileBelowLeft)
     ) {
-      this.velocityY = 0;
-    } else {
-      this.parentObject.positionY =
-        this.velocity.y + this.parentObject.position.y;
+      return 0;
+    }
+
+    if (
+      this.isDropping &&
+      this.velocity.x > 0 &&
+      map.isWall(this.tileBelowRight)
+    ) {
+      return 0;
+    }
+
+    return this.velocity.x;
+  }
+  yPositionDelta(map) {
+    if (
+      this.velocity.y < 0 &&
+      (map.isWall(this.tileAbove) || this.topSideOfBoundingRectTouchesWall(map))
+    ) {
+      this.velocity.y = 0;
+      return 0;
+    }
+
+    return this.velocity.y;
+  }
+  topSideOfBoundingRectTouchesWall(map) {
+    return (
+      map.isWall(
+        map.transformViewportPositionToMapTilePosition(
+          new Point(this.boundingRect.left + 1, this.boundingRect.top)
+        )
+      ) ||
+      map.isWall(
+        map.transformViewportPositionToMapTilePosition(
+          new Point(this.boundingRect.right - 1, this.boundingRect.top)
+        )
+      )
+    );
+  }
+  bottomSideOfBoundingRectTouchesWall(map) {
+    return (
+      map.isWall(
+        map.transformViewportPositionToMapTilePosition(
+          new Point(this.boundingRect.left + 1, this.boundingRect.bottom)
+        )
+      ) ||
+      map.isWall(
+        map.transformViewportPositionToMapTilePosition(
+          new Point(this.boundingRect.right - 1, this.boundingRect.bottom)
+        )
+      )
+    );
+  }
+  leftSideOfBoundingRectTouchesWall(map) {
+    const tileAtTop = map.transformViewportPositionToMapTilePosition(
+      new Point(
+        this.boundingRect.left,
+        this.boundingRect.top + this.topBoundingRectLenience
+      )
+    );
+
+    if (map.isWall(tileAtTop)) {
+      return true;
+    }
+
+    const tileAtBottom = map.transformViewportPositionToMapTilePosition(
+      new Point(this.boundingRect.left, this.boundingRect.bottom - 1)
+    );
+
+    if (map.isWall(tileAtBottom)) {
+      return true;
+    }
+  }
+  rightSideOfBoundingRectTouchesWall(map) {
+    const tileAtTop = map.transformViewportPositionToMapTilePosition(
+      new Point(
+        this.boundingRect.right,
+        this.boundingRect.top + this.topBoundingRectLenience
+      )
+    );
+
+    if (map.isWall(tileAtTop)) {
+      return true;
+    }
+
+    const tileAtBottom = map.transformViewportPositionToMapTilePosition(
+      new Point(this.boundingRect.right, this.boundingRect.bottom - 1)
+    );
+
+    if (map.isWall(tileAtBottom)) {
+      return true;
     }
   }
   applyDamping() {
-    this.velocityX *= this.damping * 0.5;
-    this.velocityY *= this.damping;
+    this.velocityX *= this.dampingX;
+    this.velocityY *= this.dampingY;
   }
   floorVelocity() {
     if (this.objectiveVelocityX < 0.1) {
@@ -153,7 +223,7 @@ export default class Physics {
   }
   fall() {
     if (this.isDropping) {
-      this.checkDrop();
+      this.checkIfShouldContinueDropping();
     }
     if (this.velocityY > 0 && this.isStandingOnGround() && !this.isDropping) {
       this.velocity.y = 0;
@@ -165,7 +235,7 @@ export default class Physics {
       new Point(this.tileBelow.x, this.tileBelow.y - 1)
     ).y;
   }
-  checkDrop() {
+  checkIfShouldContinueDropping() {
     if (this.droppedDownFullTile() || this.wentAboveStartingPositionOfDrop()) {
       this.isDropping = false;
     }
@@ -182,13 +252,19 @@ export default class Physics {
   isStandingOnGround() {
     const map = this.parentObject.map;
 
-    return (
-      map.isWall(this.tileBelow) ||
-      (this.bottomSideOfBoundingRectTouchesWall(map) &&
-        this.boundingRect.bottom <=
-          this.parentObject.map.getTopOfTile(this.tileBelow).y) ||
-      this.isOnPlatform()
-    );
+    if (map.isWall(this.tileBelow)) {
+      return true;
+    }
+
+    if (this.bottomSideOfBoundingRectTouchesWall(map)) {
+      return true;
+    }
+
+    if (this.isOnPlatform()) {
+      return true;
+    }
+
+    return false;
   }
   isOnPlatform() {
     const topOfTileBelow = this.parentObject.map.getTopOfTile(this.tileBelow).y;
@@ -199,28 +275,20 @@ export default class Physics {
     );
   }
   moveLeft() {
-    if (!this.canMoveLeft()) {
-      return;
+    if (this.canMoveLeft()) {
+      this.velocityX = -this.walkSpeed;
     }
-    this.velocityX = -this.walkSpeed;
   }
   moveRight() {
-    if (!this.canMoveRight()) {
-      return;
+    if (this.canMoveRight()) {
+      this.velocityX = this.walkSpeed;
     }
-    this.velocityX = this.walkSpeed;
   }
   canMoveLeft() {
-    return (
-      this.parentObject.map.isWalkable(this.tileLeft) ||
-      this.parentObject.map.isPlatform(this.tileLeft)
-    );
+    return !this.leftSideOfBoundingRectTouchesWall(this.parentObject.map);
   }
   canMoveRight() {
-    return (
-      this.parentObject.map.isWalkable(this.tileRight) ||
-      this.parentObject.map.isPlatform(this.tileRight)
-    );
+    return !this.rightSideOfBoundingRectTouchesWall(this.parentObject.map);
   }
   jump() {
     this.velocityY = 0;
@@ -242,23 +310,17 @@ export default class Physics {
       this.startDropPosY = this.boundingRect.bottom;
     }
   }
-
-  bottomSideOfBoundingRectTouchesWall(map) {
-    return (
-      map.isWall(
-        map.transformViewportPositionToMapTilePosition(
-          new Point(this.boundingRect.left + 1, this.boundingRect.bottom)
-        )
-      ) ||
-      map.isWall(
-        map.transformViewportPositionToMapTilePosition(
-          new Point(this.boundingRect.right - 1, this.boundingRect.bottom)
-        )
-      )
-    );
-  }
-
   tileBelowIsPlatform() {
     return this.parentObject.map.isPlatform(this.tileBelow);
+  }
+  draw(context) {
+    // draw bounding rectangle
+    drawRectangle(
+      context,
+      this.boundingRect.position,
+      this.boundingRect.size,
+      "magenta",
+      false
+    );
   }
 }
