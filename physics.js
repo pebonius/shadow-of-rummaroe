@@ -100,12 +100,10 @@ export default class Physics {
   xPositionDelta(map) {
     if (this.velocity.x < 0 && this.leftSideOfBoundingRectTouchesWall(map)) {
       this.velocity.x = 0;
-      return 0;
     }
 
     if (this.velocity.x > 0 && this.rightSideOfBoundingRectTouchesWall(map)) {
       this.velocity.x = 0;
-      return 0;
     }
 
     if (
@@ -113,7 +111,7 @@ export default class Physics {
       this.velocity.x < 0 &&
       map.isWall(this.tileBelowLeft)
     ) {
-      return 0;
+      this.velocity.x = 0;
     }
 
     if (
@@ -121,7 +119,7 @@ export default class Physics {
       this.velocity.x > 0 &&
       map.isWall(this.tileBelowRight)
     ) {
-      return 0;
+      this.velocity.x = 0;
     }
 
     return this.velocity.x;
@@ -132,7 +130,6 @@ export default class Physics {
       (map.isWall(this.tileAbove) || this.topSideOfBoundingRectTouchesWall(map))
     ) {
       this.velocity.y = 0;
-      return 0;
     }
 
     return this.velocity.y;
