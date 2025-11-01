@@ -82,6 +82,7 @@ export default class Physics {
   update() {
     this.updateBoundingRect();
     this.floorVelocity();
+    this.limitVelocity();
     this.updatePosByVelocity();
     this.applyDamping();
     this.fall();
@@ -96,6 +97,22 @@ export default class Physics {
       this.parentObject.position.x + this.xPositionDelta(map);
     this.parentObject.positionY =
       this.parentObject.position.y + this.yPositionDelta(map);
+  }
+  limitVelocity() {
+    const maxVelocity = 10;
+
+    if (this.velocity.x > maxVelocity) {
+      this.velocity.x = maxVelocity;
+    }
+    if (this.velocity.x < -maxVelocity) {
+      this.velocity.x = -maxVelocity;
+    }
+    if (this.velocity.y > maxVelocity) {
+      this.velocity.y = maxVelocity;
+    }
+    if (this.velocity.y < -maxVelocity) {
+      this.velocity.y = -maxVelocity;
+    }
   }
   xPositionDelta(map) {
     if (this.velocity.x < 0 && this.leftSideOfBoundingRectTouchesWall(map)) {
