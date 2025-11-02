@@ -1,5 +1,12 @@
 import { playerTests } from "./player.test.js";
 
+const testTests = [isTest, areTest];
+
+const testsToRun = [
+  { tests: testTests, name: "test tests" },
+  { tests: playerTests, name: "player tests" },
+];
+
 export function is(receivedValue, expectedValue) {
   if (receivedValue === expectedValue) {
     console.log(
@@ -43,13 +50,6 @@ function isTest() {
 function areTest() {
   is(are([true, true], true), true);
 }
-
-const testTests = [isTest, areTest];
-
-const testsToRun = [
-  { tests: testTests, name: "test tests" },
-  { tests: playerTests, name: "player tests" },
-];
 
 function runTests() {
   testsToRun.forEach((testSuite) => {
