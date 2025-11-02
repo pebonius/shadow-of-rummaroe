@@ -5,6 +5,15 @@ import Physics from "./physics.js";
 import PlayerCollisions from "./playerCollisions.js";
 import Point from "./point.js";
 
+export const playerStates = {
+  normal: "normal",
+  dying: "dying",
+};
+
+export const isValidPlayerState = (value) => {
+  return Object.values(playerStates).includes(value);
+};
+
 export default class Player {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
@@ -16,12 +25,7 @@ export default class Player {
     this.animations = new CharacterAnimations(this);
     this.deathAnimationTimer = 0;
     this.deathAnimationDuration = 60;
-    this.playerStates = {
-      normal: "normal",
-      dying: "dying",
-    };
-    Object.freeze(this.playerStates);
-    this.currentState = this.playerStates.normal;
+    this.currentState = playerStates.normal;
     this.currentSavePoint = null;
   }
   get width() {
@@ -52,11 +56,8 @@ export default class Player {
     this.positionX = x;
     this.positionY = y;
   }
-  isValidPlayerState(value) {
-    return Object.values(this.playerStates).includes(value);
-  }
   setState(value) {
-    if (!this.isValidPlayerState) {
+    if (!isValidPlayerState(value)) {
       throw new RangeError(`<<${value}>> is not a valid playerState`);
     }
     this.currentState = value;
@@ -79,7 +80,7 @@ export default class Player {
     this.gameScreen.debug.logInDebugMode(`player entered map: <<${map}>>`);
   }
   onHurt() {
-    this.setState(this.playerStates.dying);
+    this.setState(playerStates.dying);
     this.sounds.playDamage();
   }
   actDying() {
@@ -106,7 +107,7 @@ export default class Player {
     this.gameScreen.debug.logInDebugMode(`player revived at save point`);
   }
   disableDeathState() {
-    this.setState(this.playerStates.normal);
+    this.setState(playerStates.normal);
     this.deathAnimationTimer = 0;
   }
   enemyJump() {
@@ -151,14 +152,14 @@ export default class Player {
   }
   update(input) {
     switch (this.currentState) {
-      case this.playerStates.normal:
+      case playerStates.normal:
         this.updateNormalState(input);
         break;
-      case this.playerStates.dying:
-        this.updateDyingState(input);
+      case playerStates.dying:
+        this.updateDyingState();
         break;
       default:
-        this.updateUnrecognizedState(input);
+        this.updateUnrecognizedState();
     }
   }
   updateNormalState(input) {
@@ -167,11 +168,11 @@ export default class Player {
     this.handleInput(input);
     this.animations.update();
   }
-  updateDyingState(input) {
+  updateDyingState() {
     this.actDying();
     this.animations.update();
   }
-  updateUnrecognizedState(input) {
+  updateUnrecognizedState() {
     throw new Error(
       `player was put in unrecognized state <<${this.currentState}>>. set state using the <<setState>> setter.`
     );
