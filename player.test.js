@@ -3,7 +3,7 @@ import {
   isValidPlayerState,
   isValidSavePoint,
 } from "./player.js";
-import { areOutputs } from "./tests.js";
+import { areOutputs, throws } from "./tests.js";
 
 function isValidPlayerStateTest() {
   areOutputs(
@@ -52,9 +52,17 @@ function isValidSavePointTest() {
     {
       position: { x: 10, y: null },
     },
+    "some string",
+    0,
   ];
 
   areOutputs(invalidSavePoints, isValidSavePoint, false);
+  throws(() => {
+    isValidSavePoint(undefined);
+  });
+  throws(() => {
+    isValidSavePoint(null);
+  });
 }
 
 export const playerTests = [isValidPlayerStateTest, isValidSavePointTest];

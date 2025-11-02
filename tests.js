@@ -1,6 +1,8 @@
 import { playerTests } from "./player.test.js";
 import { savePointTests } from "./savePoint.test.js";
 
+let testsFailed = 0;
+
 const testTests = [isTest, areTest, throwTest, doesNotThrowTest];
 
 const testsToRun = [
@@ -19,6 +21,7 @@ export function is(receivedValue, expectedValue) {
   console.log(
     `\t\texpected ${expectedValue}, received ${receivedValue} - NOK ❌`
   );
+  testsFailed++;
   return false;
 }
 
@@ -49,20 +52,24 @@ export function throws(functionToTest) {
   try {
     functionToTest();
   } catch (error) {
-    console.log(`did throw error - OK 🟢`);
-    return;
+    console.log(`\t\tdid throw error - OK 🟢`);
+    return true;
   }
-  console.log(`did not throw error - NOK ❌`);
+  console.log(`\t\tdid not throw error - NOK ❌`);
+  testsFailed++;
+  return false;
 }
 
 export function doesNotThrow(functionToTest) {
   try {
     functionToTest();
   } catch (error) {
-    console.log(`did throw error - NOK ❌`);
-    return;
+    console.log(`\t\tdid throw error - NOK ❌`);
+    testsFailed++;
+    return false;
   }
-  console.log(`did not throw error - OK 🟢`);
+  console.log(`\t\tdid not throw error - OK 🟢`);
+  return true;
 }
 
 function isTest() {
@@ -86,14 +93,18 @@ function doesNotThrowTest() {
 }
 
 function runTests() {
+  let testsRan = 0;
   testsToRun.forEach((testSuite) => {
     console.log(`running ${testSuite.name}`);
     testSuite.tests.forEach((test) => {
       console.log(`\trunning ${test.name}...`);
       test();
+      testsRan++;
       console.log(`\t${test.name} completed`);
     });
   });
+  console.log(`total tests ran: ${testsRan}`);
+  console.log(`tests failed: ${testsFailed}`);
 }
 
 runTests();
