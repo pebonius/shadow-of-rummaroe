@@ -14,6 +14,25 @@ export const isValidPlayerState = (value) => {
   return Object.values(playerStates).includes(value);
 };
 
+export const isValidSavePoint = (value) => {
+  if (!value.position) {
+    return false;
+  }
+  if (!Number.isInteger(value.position.x)) {
+    return false;
+  }
+  if (!Number.isInteger(value.position.y)) {
+    return false;
+  }
+  if (!value.map) {
+    return false;
+  }
+  if (!value.map.name) {
+    return false;
+  }
+  return true;
+};
+
 export default class Player {
   constructor(gameScreen, data) {
     this.gameScreen = gameScreen;
@@ -25,8 +44,8 @@ export default class Player {
     this.animations = new CharacterAnimations(this);
     this.deathAnimationTimer = 0;
     this.deathAnimationDuration = 60;
-    this.currentState = playerStates.normal;
-    this.currentSavePoint = null;
+    this._state = playerStates.normal;
+    this._savePoint = null;
   }
   get width() {
     return this.spriteSheet.tileSize;
@@ -44,43 +63,31 @@ export default class Player {
   set positionY(value) {
     this.position.y = Math.round(value);
   }
-  setPosition(x, y) {
-    if (!Number.isInteger(x)) {
-      throw new RangeError(`${x} is not an integer`);
-    }
-
-    if (!Number.isInteger(y)) {
-      throw new RangeError(`${y} is not an integer`);
-    }
-
-    this.positionX = x;
-    this.positionY = y;
-  }
-  setState(value) {
+  set state(value) {
     if (!isValidPlayerState(value)) {
-      throw new RangeError(`<<${value}>> is not a valid playerState`);
+      throw new RangeError(`<<${value}>> is not a valid player state`);
     }
-    this.currentState = value;
-    this.gameScreen.debug.logInDebugMode(`player state set to <<${value}>>`);
+    this._state = value;
+  }
+  get savePoint() {
+    return this._savePoint;
   }
   set savePoint(value) {
-    this.currentSavePoint = {
+    if (!isValidSavePoint(value)) {
+      throw new RangeError(`<<${value}>> is not a valid save point`);
+    }
+
+    this._savePoint = {
       position: value.position,
       map: value.map,
     };
-
-    this.gameScreen.debug.logInDebugMode(
-      `player saved at map: <<${value.map}>>, position: <<${value.position.x}, ${value.position.y}>>`
-    );
   }
   enterMap(map) {
     this.map = map;
     map.onEnter(this);
-
-    this.gameScreen.debug.logInDebugMode(`player entered map: <<${map}>>`);
   }
   onHurt() {
-    this.setState(playerStates.dying);
+    this.state = playerStates.dying;
     this.sounds.playDamage();
   }
   actDying() {
@@ -93,21 +100,19 @@ export default class Player {
     this.onDeath();
   }
   onDeath() {
-    if (this.currentSavePoint === null) {
+    if (this._savePoint === null) {
       this.gameScreen.endGame();
       return;
     }
 
-    this.enterMap(this.currentSavePoint.map);
-    this.setPosition(
-      this.currentSavePoint.position.x,
-      this.currentSavePoint.position.y
-    );
+    this.enterMap(this._savePoint.map);
+    this.positionX = this._savePoint.position.x;
+    this.positionY = this._savePoint.position.y;
     this.disableDeathState();
     this.gameScreen.debug.logInDebugMode(`player revived at save point`);
   }
   disableDeathState() {
-    this.setState(playerStates.normal);
+    this.state = playerStates.normal;
     this.deathAnimationTimer = 0;
   }
   enemyJump() {
@@ -151,7 +156,7 @@ export default class Player {
     this.physics.drop();
   }
   update(input) {
-    switch (this.currentState) {
+    switch (this._state) {
       case playerStates.normal:
         this.updateNormalState(input);
         break;
@@ -173,9 +178,7 @@ export default class Player {
     this.animations.update();
   }
   updateUnrecognizedState() {
-    throw new Error(
-      `player was put in unrecognized state <<${this.currentState}>>. set state using the <<setState>> setter.`
-    );
+    throw new Error(`player was in unrecognized state <<${this._state}>>`);
   }
   draw(context) {
     this.animations.draw(context);

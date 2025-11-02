@@ -1,10 +1,12 @@
 import { playerTests } from "./player.test.js";
+import { savePointTests } from "./savePoint.test.js";
 
-const testTests = [isTest, areTest];
+const testTests = [isTest, areTest, throwTest, doesNotThrowTest];
 
 const testsToRun = [
   { tests: testTests, name: "test tests" },
   { tests: playerTests, name: "player tests" },
+  { tests: savePointTests, name: "savePoint tests" },
 ];
 
 export function is(receivedValue, expectedValue) {
@@ -43,12 +45,44 @@ export function areOutputs(valuesToTest, functionToTest, expectedValue) {
   });
 }
 
+export function throws(functionToTest) {
+  try {
+    functionToTest();
+  } catch (error) {
+    console.log(`did throw error - OK 🟢`);
+    return;
+  }
+  console.log(`did not throw error - NOK ❌`);
+}
+
+export function doesNotThrow(functionToTest) {
+  try {
+    functionToTest();
+  } catch (error) {
+    console.log(`did throw error - NOK ❌`);
+    return;
+  }
+  console.log(`did not throw error - OK 🟢`);
+}
+
 function isTest() {
   is(true, true);
 }
 
 function areTest() {
   is(are([true, true], true), true);
+}
+
+function throwTest() {
+  throws(() => {
+    throw new Error("some error");
+  });
+}
+
+function doesNotThrowTest() {
+  doesNotThrow(() => {
+    const someValue = 0;
+  });
 }
 
 function runTests() {

@@ -2,6 +2,10 @@ import Debug from "./debug.js";
 import ItemAnimations from "./itemAnimations.js";
 import Point from "./point.js";
 
+export function saveGame(player, position, map) {
+  player.savePoint = { position: position, map: map };
+}
+
 export default class SavePoint {
   constructor(gameScreen, data, map) {
     this.gameScreen = gameScreen;
@@ -37,14 +41,16 @@ export default class SavePoint {
   }
   onCollect() {
     const player = this.gameScreen.player;
-    if (
-      player.currentSavePoint === null ||
-      player.currentSavePoint.map.name !== this.map.name
-    ) {
-      this.gameScreen.sound.playSoundEffect(this.soundSrc);
 
-      player.savePoint = { position: this.position, map: this.map };
+    if (player.savePoint && player.savePoint.map.name === this.map.name) {
+      return;
     }
+
+    this.playSaveSound();
+    saveGame(player, this.position, this.map);
+  }
+  playSaveSound() {
+    this.gameScreen.sound.playSoundEffect(this.soundSrc);
   }
   draw(context) {
     this.animations.draw(context);
