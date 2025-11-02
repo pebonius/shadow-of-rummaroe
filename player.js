@@ -16,7 +16,12 @@ export default class Player {
     this.animations = new CharacterAnimations(this);
     this.deathAnimationTimer = 0;
     this.deathAnimationDuration = 60;
-    this.currentState = "normal";
+    this.playerStates = {
+      normal: "normal",
+      dying: "dying",
+    };
+    Object.freeze(this.playerStates);
+    this.currentState = this.playerStates.normal;
     this.currentSavePoint = null;
   }
   get width() {
@@ -25,17 +30,35 @@ export default class Player {
   get height() {
     return this.spriteSheet.tileSize;
   }
+  get center() {
+    const half = this.spriteSheet.tileSize * 0.5;
+    return new Point(this.position.x + half, this.position.y + half);
+  }
   set positionX(value) {
     this.position.x = Math.round(value);
   }
   set positionY(value) {
     this.position.y = Math.round(value);
   }
-  get center() {
-    const half = this.spriteSheet.tileSize * 0.5;
-    return new Point(this.position.x + half, this.position.y + half);
+  setPosition(x, y) {
+    if (!Number.isInteger(x)) {
+      throw new RangeError(`${x} is not an integer`);
+    }
+
+    if (!Number.isInteger(y)) {
+      throw new RangeError(`${y} is not an integer`);
+    }
+
+    this.positionX = x;
+    this.positionY = y;
   }
-  set state(value) {
+  isValidPlayerState(value) {
+    return Object.values(this.playerStates).includes(value);
+  }
+  setState(value) {
+    if (!this.isValidPlayerState) {
+      throw new RangeError(`<<${value}>> is not a valid playerState`);
+    }
     this.currentState = value;
     this.gameScreen.debug.logInDebugMode(`player state set to <<${value}>>`);
   }
@@ -56,28 +79,35 @@ export default class Player {
     this.gameScreen.debug.logInDebugMode(`player entered map: <<${map}>>`);
   }
   onHurt() {
-    this.state = "dying";
+    this.setState(this.playerStates.dying);
     this.sounds.playDamage();
   }
   actDying() {
     if (this.deathAnimationTimer <= this.deathAnimationDuration) {
       this.animations.playStunned();
       this.deathAnimationTimer++;
-    } else {
-      this.onDeath();
+      return;
     }
+
+    this.onDeath();
   }
   onDeath() {
     if (this.currentSavePoint === null) {
       this.gameScreen.endGame();
-    } else {
-      this.enterMap(this.currentSavePoint.map);
-      this.positionX = this.currentSavePoint.position.x;
-      this.positionY = this.currentSavePoint.position.y;
-      this.state = "normal";
-      this.deathAnimationTimer = 0;
-      this.gameScreen.debug.logInDebugMode(`player revived at save point`);
+      return;
     }
+
+    this.enterMap(this.currentSavePoint.map);
+    this.setPosition(
+      this.currentSavePoint.position.x,
+      this.currentSavePoint.position.y
+    );
+    this.disableDeathState();
+    this.gameScreen.debug.logInDebugMode(`player revived at save point`);
+  }
+  disableDeathState() {
+    this.setState(this.playerStates.normal);
+    this.deathAnimationTimer = 0;
   }
   enemyJump() {
     this.physics.bounce();
@@ -85,39 +115,66 @@ export default class Player {
   }
   handleInput(input) {
     if (input.isLeft()) {
-      this.physics.moveLeft();
-      this.animations.playWalkLeft();
-      this.sounds.walk();
+      this.handleLeftInput();
     } else if (input.isRight()) {
-      this.physics.moveRight();
-      this.animations.playWalkRight();
-      this.sounds.walk();
+      this.handleRightInput();
     }
-    if (this.physics.isStandingOnGround() && input.isJump()) {
-      this.physics.jump();
-      this.sounds.playJump();
+    if (input.isJump()) {
+      this.handleJumpInput();
     }
-    if (this.physics.isStandingOnGround() && input.isDrop()) {
-      this.physics.drop();
+    if (input.isDrop()) {
+      this.handleDropInput();
     }
+  }
+  handleLeftInput() {
+    this.physics.moveLeft();
+    this.animations.playWalkLeft();
+    this.sounds.walk();
+  }
+  handleRightInput() {
+    this.physics.moveRight();
+    this.animations.playWalkRight();
+    this.sounds.walk();
+  }
+  handleJumpInput() {
+    if (!this.physics.isStandingOnGround()) {
+      return;
+    }
+    this.physics.jump();
+    this.sounds.playJump();
+  }
+  handleDropInput() {
+    if (!this.physics.isStandingOnGround()) {
+      return;
+    }
+    this.physics.drop();
   }
   update(input) {
     switch (this.currentState) {
-      case "normal":
-        this.physics.update();
-        this.collisions.update();
-        this.handleInput(input);
-        this.animations.update();
+      case this.playerStates.normal:
+        this.updateNormalState(input);
         break;
-      case "dying":
-        this.actDying();
-        this.animations.update();
+      case this.playerStates.dying:
+        this.updateDyingState(input);
         break;
       default:
-        throw new Error(
-          `player was in unrecognized state ${this.currentState}`
-        );
+        this.updateUnrecognizedState(input);
     }
+  }
+  updateNormalState(input) {
+    this.physics.update();
+    this.collisions.update();
+    this.handleInput(input);
+    this.animations.update();
+  }
+  updateDyingState(input) {
+    this.actDying();
+    this.animations.update();
+  }
+  updateUnrecognizedState(input) {
+    throw new Error(
+      `player was put in unrecognized state <<${this.currentState}>>. set state using the <<setState>> setter.`
+    );
   }
   draw(context) {
     this.animations.draw(context);
