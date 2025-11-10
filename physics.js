@@ -18,7 +18,7 @@ export default class Physics {
         this.parentObject.height
       )
     );
-    this.topBoundingRectLenience = 3;
+    this.topBoundingRectLenience = 6;
   }
   get boundingRectPos() {
     return new Point(
