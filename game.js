@@ -31,7 +31,6 @@ export default class Game {
       )
     );
     this.isRunning = true;
-    var self = this;
 
     // for FPS counter
     this.lastLoop = Date.now();
@@ -44,7 +43,7 @@ export default class Game {
     this.lastUpdateTime = Date.now();
     this.updateRate = 15;
 
-    requestAnimationFrame(() => self.gameLoop(self));
+    requestAnimationFrame(() => this.gameLoop());
   }
   update() {
     // throttle update rate
@@ -71,12 +70,12 @@ export default class Game {
   drawFpsCounter() {
     drawText(this.context, Math.round(this.fpsString), 10, "lime", 140, 5);
   }
-  gameLoop(self) {
+  gameLoop() {
     this.measureFps();
-    self.update();
-    self.draw();
-    if (self.isRunning) {
-      requestAnimationFrame(() => self.gameLoop(self));
+    this.update();
+    this.draw();
+    if (this.isRunning) {
+      requestAnimationFrame(() => this.gameLoop());
     }
   }
   measureFps() {
